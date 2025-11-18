@@ -1,0 +1,14 @@
+body {
+  background-color: #f0f8ff;
+  font-family: "나눔스퀘어 네오", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  color: #000;
+}
