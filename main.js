@@ -1,58 +1,68 @@
 // main.js
 console.log("main script loaded.");
 
-// 1. HTML 요소 가져오기 (ID가 HTML과 정확히 일치해야 함)
-const searchBtn = document.querySelector("#searchBtn");
-const cityInput = document.querySelector("#cityInput");
-const weatherResultDiv = document.querySelector("#weather-result");
-
-// 2. 버튼 클릭 이벤트 리스너 추가
-searchBtn.addEventListener("click", async () => {
-  const city = cityInput.value;
-
-  // 입력값 검증
-  if (!city) {
-    alert("도시 이름을 입력해주세요!");
-    return;
-  }
-
-  // 3. 데이터 요청 및 표시
-  try {
-    // Vercel 서버리스 함수(중계기) 호출
-    const response = await fetch(`/api/get-weather?city=${city}`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log("서버 응답 데이터:", data);
-
-    // 4. 화면 업데이트
-    weatherResultDiv.innerHTML = `
-            <h2>${data.name}의 날씨</h2>
-            <p>🌡️ 온도: ${data.main.temp}°C</p>
-            <p>☁️ 날씨: ${data.weather[0].description}</p>
-        `;
-  } catch (error) {
-    console.error("에러 발생:", error);
-    weatherResultDiv.innerHTML = `<p style="color:red;">날씨 정보를 가져오지 못했습니다.<br>도시 이름을 확인해주세요.</p>`;
-  }
-});
-
+// API 호출 및 데이터 처리
 async function getWeather(city) {
-  // API 호출 및 데이터 처리
+  // 도시 입력값 검증
+  if (!city) {
+    throw new Error("도시 이름을 입력해주세요!");
+  }
+
+  // Vercel 서버리스 함수(중계기) 호출
+  const response = await fetch(`/api/get-weather?city=${city}`);
+
+  // HTTP 에러 처리
+  if (!response.ok) {
+    throw new Error(`날씨 정보를 가져올 수 없습니다. (${response.status})`);
+  }
+
+  // JSON 데이터 파싱 후 반환
+  const data = await response.json();
+  return data;
 }
 
+// DOM 업데이트 및 UI 조작
 function displayWeather(data) {
-  // DOM 업데이트 및 UI 조작
+  // weather-result 부분 선택
+  const weatherResultDiv = document.querySelector("#weather-result");
+
+  // 날씨 아이콘 URL 생성
+  const iconCode = data.weather[0].icon;
+  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+  // HTML 업데이트 (카드 디자인 적용)
+  weatherResultDiv.innerHTML = `
+        <div class="weather-card">
+            <h2>${data.name}</h2>
+            <img src="${iconUrl}" alt="날씨 아이콘">
+            <h1 class="temp">${Math.round(data.main.temp)}°C</h1>
+            <p class="desc">${data.weather[0].description}</p>
+            <div class="details">
+                <span>💧 습도 ${data.main.humidity}%</span>
+                <span>💨 풍속 ${data.wind.speed}m/s</span>
+            </div>
+        </div>
+    `;
 }
 
+// 오류 처리
 function handleError(error) {
-  // 오류 처리
+  console.error("에러 발생:", error);
+  const weatherResultDiv = document.querySelector("#weather-result");
+
+  // 에러 메시지 표시
+  weatherResultDiv.innerHTML = `
+        <div class="weather-card" style="color: red;">
+            <h3>오류 발생 ⚠️</h3>
+            <p>${error.message}</p>
+            <p>도시 이름을 다시 확인해주세요.</p>
+        </div>
+    `;
 }
 
 document.querySelector("#searchBtn").addEventListener("click", () => {
   const city = document.querySelector("#cityInput").value;
-  getWeather(city).catch(handleError);
+  getWeather(city)
+    .then((data) => displayWeather(data))
+    .catch((error) => handleError(error));
 });
