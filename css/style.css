@@ -1,14 +1,253 @@
-body {
-  background-color: #f0f8ff;
-  font-family: "나눔스퀘어 네오", sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* 1. 나눔스퀘어 네오 폰트 불러오기 (CDN) */
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumSquareNeo/nanumsquareneo.css");
+
+/* 2. 기본 리셋 및 폰트 설정 */
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
-h1 {
-  color: #000;
+body {
+  font-family: "NanumSquareNeo", sans-serif; /* 폰트 적용 */
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+/* 3. 상단 히어로 섹션 (배경 이미지 영역) */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 50vh; /* 화면 높이의 50% 차지 */
+  background-image: url("./images/bg_sky.jpg"); /* 로컬 이미지 사용 */
+  background-size: cover; /* 꽉 채우기 */
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 배경 위에 검은색 틴트(Overlay)를 깔아서 글씨가 잘 보이게 함 */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3); /* 30% 어두운 막 */
+}
+
+/* Navbar */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 40px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 300; /* Light */
+}
+
+.logo strong {
+  font-weight: 800; /* ExtraBold */
+}
+
+/* 히어로 내부 컨텐츠 (검색창 등) */
+.hero-content {
+  position: relative;
+  z-index: 5; /* 오버레이보다 위에 표시 */
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.hero-title {
+  color: #fff;
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 검색창 디자인 */
+.search-box {
+  display: flex;
+  background: #fff;
+  border-radius: 50px;
+  padding: 5px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.search-box:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+input {
+  flex: 1;
+  border: none;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  outline: none;
+  font-family: "NanumSquareNeo", sans-serif;
+}
+
+#searchBtn {
+  background-color: #2b7a78; /* 포인트 컬러 (청록색) */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#searchBtn:hover {
+  background-color: #17252a;
+}
+
+/* 4. 메인 컨텐츠 영역 */
+.container {
+  max-width: 1200px;
+  margin: -60px auto 50px; /* 히어로 영역 위로 살짝 겹치게 (-60px) */
+  padding: 0 20px;
+  position: relative;
+  z-index: 10;
+}
+
+/* 날씨 카드 (현재 날씨) */
+.weather-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px); /* 유리 효과 */
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.weather-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+.weather-card img {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+.weather-card .temp {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #17252a;
+  margin: 10px 0;
+}
+.weather-card .desc {
+  font-size: 1.3rem;
+  color: #666;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+.weather-card .details {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* 안내 문구 */
+.empty-state {
+  background: white;
+  padding: 50px;
+  border-radius: 20px;
+  text-align: center;
+  color: #888;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 예보 컨테이너 (가로 스크롤 가능하게) */
+.forecast-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* 예보 카드 */
+.forecast-card {
+  background: white;
+  padding: 20px 15px;
+  border-radius: 15px;
+  width: 120px; /* 조금 더 넓게 */
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.forecast-card:hover {
+  transform: translateY(-5px);
+}
+
+.forecast-card .day {
+  font-weight: 800;
+  color: #2b7a78;
+  margin-bottom: 5px;
+}
+.forecast-card img {
+  width: 50px;
+  height: 50px;
+}
+.forecast-card .temp {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 반응형 (모바일) */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 40vh;
+  }
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  .container {
+    margin-top: -40px;
+  }
+  .weather-card {
+    padding: 20px;
+  }
+  .weather-card .temp {
+    font-size: 3rem;
+  }
 }

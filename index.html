@@ -12,12 +12,53 @@
   </head>
 
   <body>
-    <h1>나만의 날씨 앱</h1>
-    <div class="search-box">
-      <input type="text" id="cityInput" placeholder="도시 이름을 입력하세요." />
-      <button id="searchBtn">날씨 검색</button>
-    </div>
-    <div id="weather-result"><p>도시를 검색해주세요.</p></div>
+    <header class="hero-section">
+      <nav class="navbar">
+        <div class="logo">나만의 날씨 앱</div>
+      </nav>
+
+      <div class="hero-content">
+        <h1 class="hero-title">어느 도시의 날씨가 궁금하신가요?</h1>
+        <div class="search-box">
+          <input
+            type="text"
+            id="cityInput"
+            placeholder="도시 이름을 입력하세요. (예: Seoul, London)"
+          />
+          <button id="searchBtn">
+            <!-- 돋보기 아이콘 (SVG) -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 (날씨 결과 표시) -->
+    <main class="container">
+      <!-- 현재 날씨 카드 -->
+      <div id="weather-result">
+        <!-- 초기 안내 문구는 JS가 데이터를 받으면 사라집니다 -->
+        <div class="empty-state">
+          <p>도시를 검색하여 날씨를 확인해보세요.</p>
+        </div>
+      </div>
+
+      <!-- 5일 예보 카드 영역 -->
+      <div id="forecast-result" class="forecast-container"></div>
+    </main>
 
     <script src="./main.js"></script>
   </body>
