@@ -1,5 +1,5 @@
 // main.js
-console.log("JavaScript 파일 로드 성공!🎉");
+console.log("main script loaded.");
 
 async function getWeather(city) {
   // API 호출 및 데이터 처리
