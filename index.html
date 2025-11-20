@@ -10,13 +10,19 @@
     <!--CSS Import-->
     <link rel="stylesheet" href="./css/style.css" />
   </head>
-  <body>
-    <h1>나만의 날씨 앱 만들기</h1>
-    <p>Vercel 배포 파이프라인 테스트</p>
-    <p>0123456789 ABC</p>
-    <p style="font-style: italic">0123456789 ABC</p>
-    <p style="font-style: thick">0123456789 ABC</p>
 
-    <script src="./js/main.js"></script>
+  <body>
+    <h1>나만의 날씨 앱</h1>
+    <div class="search-box">
+      <input
+        type="text"
+        id="city-input"
+        placeholder="도시 이름을 입력하세요."
+      />
+      <button id="search-btn">날씨 검색</button>
+    </div>
+    <div id="weather-result"><p>도시를 검색해주세요.</p></div>
+
+    <script src="./main.js"></script>
   </body>
 </html>
