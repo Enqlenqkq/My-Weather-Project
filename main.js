@@ -158,31 +158,32 @@ const MAX_HISTORY = 5; // 최대 개수 5개
 // 저장소 내용으로 화면에 버튼 만들기
 function renderHistory() {
   const historyDiv = document.querySelector("#history-container");
-
-  // history = 저장소에서 꺼낸 기록들의 배열 -> 없으면 빈 배열
   let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
 
-  historyDiv.innerHTML = ""; // init
+  historyDiv.innerHTML = ""; // 초기화
 
   history.forEach((city) => {
-    // button 요소 생성 후 btn에 할당
     const btn = document.createElement("button");
-
-    // 버튼 텍스트
     btn.textContent = city;
-
-    // 버튼 클래스
     btn.className = "history-btn";
 
-    // 버튼이 할 일 지정; 누르면 자동으로 해당 도시 검색
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
+      // 1. 검색창에 도시 이름 채워주기
       document.querySelector("#cityInput").value = city;
-      getWeather(city)
-        .then((data) => displayWeather(data))
-        .catch((error) => handleError(error));
+
+      try {
+        // 2. 현재 날씨 가져오기
+        const weatherData = await getWeather(city);
+        displayWeather(weatherData);
+
+        // 3. [추가됨] 예보 데이터 가져오기
+        const forecastData = await getForecast(city);
+        displayForecast(forecastData);
+      } catch (error) {
+        handleError(error);
+      }
     });
 
-    // 버튼 붙이기
     historyDiv.appendChild(btn);
   });
 }
