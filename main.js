@@ -65,8 +65,9 @@ document.querySelector("#searchBtn").addEventListener("click", () => {
 
   getWeather(city)
     .then((data) => {
+      console.log(`받은 데이터 전체: ${data}`);
       displayWeather(data);
-      saveHistory(data.current.name);
+      //saveHistory(data.current.name);
     })
     .catch((error) => handleError(error));
 });
