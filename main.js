@@ -2,6 +2,7 @@
 console.log("main script loaded.");
 
 // API 호출 및 데이터 처리
+// 현재 날씨 가져오기
 async function getWeather(city) {
   // 도시 입력값 검증
   if (!city) {
@@ -21,7 +22,17 @@ async function getWeather(city) {
   return data;
 }
 
+// 5일 예보 데이터 가져오기
+async function getForecast(city) {
+  const response = await fetch(`/api/get-weather?city=${city}&type=forecast`);
+  if (!response.ok) {
+    throw new Error(`에보 정보를 가져올 수 없습니다.`);
+  }
+  return await response.json();
+}
+
 // DOM 업데이트 및 UI 조작
+// 현재 날씨 표시 함수
 function displayWeather(data) {
   // weather-result 부분 선택
   const weatherResultDiv = document.querySelector("#weather-result");
@@ -45,6 +56,33 @@ function displayWeather(data) {
     `;
 }
 
+// 예보 날씨 표시 함수
+function displayForecast() {
+  const forecastContainer = document.querySelector("forecast-result");
+  forecastContainer.innerHTML = ""; // init
+
+  const dailyData = data.list.filter((item) =>
+    item.dt_txt.includes("12:00:00")
+  );
+
+  dailyData.forEach((item) => {
+    const date = new Date(item.dt * 1000);
+    const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
+    const temp = Math.round(item.main.temp);
+    const iconCode = item.weather[0].icon;
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+    const cardHtml = `
+        <div class="forecast-card">
+            <div class="day">${dayName}</div>
+            <img src="${iconUrl}" alt="icon">
+            <div class="temp">${temp}°C</div>
+        </div>
+        `;
+    forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
+  });
+}
+
 // 오류 처리
 function handleError(error) {
   console.error("에러 발생:", error);
@@ -60,21 +98,44 @@ function handleError(error) {
     `;
 }
 
-document.querySelector("#searchBtn").addEventListener("click", () => {
+document.querySelector("#searchBtn").addEventListener("click", async () => {
   const city = document.querySelector("#cityInput").value;
 
-  getWeather(city)
-    .then((data) => {
-      displayWeather(data);
-      const cityName = data.current ? data.current.name : data.name;
-      if (cityName) {
-        console.log(`저장할 도시 이름: ${cityName}`);
-        saveHistory(cityName);
-      } else {
-        console.error("도시 이름을 찾을 수 없습니다.", data);
-      }
-    })
-    .catch((error) => handleError(error));
+  try {
+    const weatherData = await getWeather(city);
+    displayWeather(weatherData);
+
+    const forecastData = await getForecast(city);
+    displayForecast(forecastData);
+
+    const cityName = weatherData.name;
+    saveHistory(cityName);
+  } catch (error) {
+    handleError(error);
+  }
+});
+
+document.querySelector("#cityInput").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    document.querySelector("#searchBtn").click();
+  }
+});
+
+const cityInput = document.querySelector("#cityInput");
+const clearBtn = document.querySelector("#clearBtn");
+
+cityInput.addEventListener("input", () => {
+  if (cityInput.value.length > 0) {
+    clearBtn.style.display = "flex";
+  } else {
+    clearBtn.style.display = "none";
+  }
+});
+
+clearBtn.addEventListener("click", () => {
+  cityInput.value = ""; // 입력창 비우기
+  clearBtn.style.display = "none"; // 버튼 숨기기
+  cityInput.focus(); // 바로 다시 입력할 수 있게 커서 두기
 });
 
 // 최근 검색어 저장

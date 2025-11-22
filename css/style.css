@@ -130,6 +130,22 @@ input {
   background-color: #17252a;
 }
 
+#clearBtn {
+  background: transparent; /* 배경 투명 */
+  border: none;
+  color: #999; /* 연한 회색 */
+  cursor: pointer;
+  padding: 0 10px; /* 좌우 여백 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+#clearBtn:hover {
+  color: #333; /* 마우스 올리면 진하게 */
+}
+
 /* 4. 메인 컨텐츠 영역 */
 .container {
   max-width: 1200px;
