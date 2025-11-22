@@ -39,7 +39,7 @@ function displayWeather(data) {
 
   // 날씨 아이콘 URL 생성
   const iconCode = data.weather[0].icon;
-  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
   // HTML 업데이트 (카드 디자인 적용)
   weatherResultDiv.innerHTML = `
@@ -83,7 +83,7 @@ function displayForecast(data) {
     const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
     const temp = Math.round(item.main.temp);
     const iconCode = item.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
     const cardHtml = `
       <div class="forecast-card">

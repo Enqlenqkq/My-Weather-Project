@@ -307,3 +307,11 @@ input {
   transform: translateY(-2px); /* 살짝 위로 뜸 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.weather-card img,
+.forecast-card img {
+  /* 어떤 필터나 다크모드 확장 프로그램도 이미지 색상을 못 바꾸게 함 */
+  filter: none !important;
+  /* 이미지 렌더링을 부드럽게 */
+  image-rendering: -webkit-optimize-contrast;
+}
