@@ -260,6 +260,18 @@ input {
   }
 }
 
+.history-container {
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .history-btn {
   background: rgba(255, 255, 255, 0.3); /* 반투명 흰색 */
   border: 1px solid rgba(255, 255, 255, 0.6);
@@ -270,7 +282,6 @@ input {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease; /* 부드러운 움직임 */
-  gap: 5px;
 }
 
 /* 마우스 올렸을 때 효과 */
