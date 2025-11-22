@@ -56,10 +56,18 @@ body {
   color: #fff;
   font-size: 1.5rem;
   font-weight: 300; /* Light */
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .logo strong {
   font-weight: 800; /* ExtraBold */
+}
+
+.logo img {
+  height: 3rem;
 }
 
 /* 히어로 내부 컨텐츠 (검색창 등) */
