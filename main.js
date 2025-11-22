@@ -65,9 +65,14 @@ document.querySelector("#searchBtn").addEventListener("click", () => {
 
   getWeather(city)
     .then((data) => {
-      console.log(`받은 데이터 전체: ${data}`);
       displayWeather(data);
-      //saveHistory(data.current.name);
+      const cityName = data.current ? data.current.name : data.name;
+      if (cityName) {
+        console.log(`저장할 도시 이름: ${cityName}`);
+        saveHistory(cityName);
+      } else {
+        console.error("도시 이름을 찾을 수 없습니다.", data);
+      }
     })
     .catch((error) => handleError(error));
 });
