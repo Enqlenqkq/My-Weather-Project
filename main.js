@@ -62,7 +62,71 @@ function handleError(error) {
 
 document.querySelector("#searchBtn").addEventListener("click", () => {
   const city = document.querySelector("#cityInput").value;
+
   getWeather(city)
-    .then((data) => displayWeather(data))
+    .then((data) => {
+      displayWeather(data);
+      saveHistory(data.current.name);
+    })
     .catch((error) => handleError(error));
+});
+
+// 최근 검색어 저장
+const HISTORY_KEY = "weatherHistory";
+const MAX_HISTORY = 5; // 최대 개수 5개
+
+// 저장소 내용으로 화면에 버튼 만들기
+function renderHistory() {
+  const historyDiv = document.querySelector("#history-container");
+
+  // history = 저장소에서 꺼낸 기록들의 배열 -> 없으면 빈 배열
+  let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+
+  historyDiv.innerHTML = ""; // init
+
+  history.forEach((city) => {
+    // button 요소 생성 후 btn에 할당
+    const btn = document.createElement("button");
+
+    // 버튼 텍스트
+    btn.textContent = city;
+
+    // 버튼 클래스
+    btn.className = "history-btn";
+
+    // 버튼이 할 일 지정; 누르면 자동으로 해당 도시 검색
+    btn.addEventListener("click", () => {
+      document.querySelector("#cityInput").value = city;
+      getWeather(city)
+        .then((data) => displayWeather(data))
+        .catch((error) => handleError(error));
+    });
+
+    // 버튼 붙이기
+    historyDiv.appendChild(btn);
+  });
+}
+
+// 검색어 저장 기능
+function saveHistory(city) {
+  // 저장소 꺼내서
+  let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+  // 중복 아니면
+  history = history.filter(
+    (savedCity) => savedCity.toLowerCase() !== city.toLowerCase()
+  );
+  // 맨 앞에 추가
+  history.unshift(city);
+  // 5개 넘으면
+  if (history.length > MAX_HISTORY) {
+    history.pop(); // 맨 뒤 기록 삭제
+  }
+  // 저장소에 다시 넣기
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  renderHistory();
+}
+
+// 페이지 로드 완료 시 실행
+document.addEventListener("DOMContentLoaded", () => {
+  renderHistory();
 });
