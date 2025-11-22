@@ -59,13 +59,25 @@ function displayWeather(data) {
 // 예보 날씨 표시 함수
 function displayForecast() {
   const forecastContainer = document.querySelector("#forecast-result");
+
+  if (!forecastContainer) return;
+
+  console.log("예보 데이터 수신:", data);
+
+  if (!data.list) {
+    console.error("예보 목록이 없습니다. 백엔드 코드를 확인하세요.");
+    return;
+  }
+
   forecastContainer.innerHTML = ""; // init
 
-  const dailyData = data.list.filter((item) =>
-    item.dt_txt.includes("12:00:00")
-  );
+  const dailyData = [];
 
-  dailyData.forEach((item) => {
+  for (let i = 0; i < data.list.length; i += 8) {
+    dailyData.push(data.list[i]);
+  }
+
+  dailyData.slice(0, 5).forEach((item) => {
     const date = new Date(item.dt * 1000);
     const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
     const temp = Math.round(item.main.temp);
@@ -74,9 +86,9 @@ function displayForecast() {
 
     const cardHtml = `
         <div class="forecast-card">
-            <div class="day">${dayName}</div>
-            <img src="${iconUrl}" alt="icon">
-            <div class="temp">${temp}°C</div>
+          <div class="day">${dayName}</div>
+          <img src="${iconUrl}" alt="icon">
+          <div class="temp">${temp}°C</div>
         </div>
         `;
     forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
