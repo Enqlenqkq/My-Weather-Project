@@ -22,7 +22,7 @@ async function getWeather(city) {
   return data;
 }
 
-// 5일 예보 데이터 가져오기
+// 예보 데이터 가져오기
 async function getForecast(city) {
   const response = await fetch(`./api/get-weather?city=${city}&type=forecast`);
   if (!response.ok) {
@@ -58,7 +58,7 @@ function displayWeather(data) {
 
 // 예보 날씨 표시 함수
 function displayForecast() {
-  const forecastContainer = document.querySelector("forecast-result");
+  const forecastContainer = document.querySelector("#forecast-result");
   forecastContainer.innerHTML = ""; // init
 
   const dailyData = data.list.filter((item) =>
