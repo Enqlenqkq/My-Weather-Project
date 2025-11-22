@@ -24,9 +24,9 @@ async function getWeather(city) {
 
 // 5일 예보 데이터 가져오기
 async function getForecast(city) {
-  const response = await fetch(`/api/get-weather?city=${city}&type=forecast`);
+  const response = await fetch(`./api/get-weather?city=${city}&type=forecast`);
   if (!response.ok) {
-    throw new Error(`에보 정보를 가져올 수 없습니다.`);
+    throw new Error(`예보 정보를 가져올 수 없습니다.`);
   }
   return await response.json();
 }
