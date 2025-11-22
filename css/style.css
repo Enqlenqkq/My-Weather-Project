@@ -209,6 +209,7 @@ input {
 /* 예보 컨테이너 (가로 스크롤 가능하게) */
 .forecast-container {
   display: flex;
+  flex-direction: row;
   gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
