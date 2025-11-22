@@ -60,23 +60,24 @@ function displayWeather(data) {
 function displayForecast(data) {
   const forecastContainer = document.querySelector("#forecast-result");
 
+  // 안전장치
   if (!forecastContainer) return;
 
-  console.log("예보 데이터 수신:", data);
+  // 1. 데이터 확인 (여기서 data가 없으면 에러가 났던 것)
+  console.log("예보 데이터:", data);
 
-  if (!data.list) {
-    console.error("예보 목록이 없습니다. 백엔드 코드를 확인하세요.");
-    return;
-  }
+  // 2. 목록이 없으면 중단
+  if (!data.list) return;
 
-  forecastContainer.innerHTML = ""; // init
+  forecastContainer.innerHTML = ""; // 초기화
 
+  // 3. 24시간 간격(8개씩 건너뛰기)으로 데이터 필터링
   const dailyData = [];
-
   for (let i = 0; i < data.list.length; i += 8) {
     dailyData.push(data.list[i]);
   }
 
+  // 4. 카드 생성 (최대 5개)
   dailyData.slice(0, 5).forEach((item) => {
     const date = new Date(item.dt * 1000);
     const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
@@ -85,12 +86,12 @@ function displayForecast(data) {
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
     const cardHtml = `
-        <div class="forecast-card">
-          <div class="day">${dayName}</div>
-          <img src="${iconUrl}" alt="icon">
-          <div class="temp">${temp}°C</div>
-        </div>
-        `;
+      <div class="forecast-card">
+        <div class="day">${dayName}</div>
+        <img src="${iconUrl}" alt="icon">
+        <div class="temp">${temp}°C</div>
+      </div>
+    `;
     forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
   });
 }
