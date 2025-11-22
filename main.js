@@ -57,7 +57,7 @@ function displayWeather(data) {
 }
 
 // 예보 날씨 표시 함수
-function displayForecast() {
+function displayForecast(data) {
   const forecastContainer = document.querySelector("#forecast-result");
 
   if (!forecastContainer) return;
