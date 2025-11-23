@@ -42,14 +42,21 @@ body {
 
 /* Navbar */
 .navbar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   padding: 20px 40px;
-  z-index: 10;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar.scrolled {
+  background-color: rgba(23, 37, 42, 0.9);
+  padding: 15px 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
