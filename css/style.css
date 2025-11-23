@@ -77,6 +77,132 @@ body {
   height: 3rem;
 }
 
+/* [style.css] 추가 내용 */
+
+/* 1. 컨트롤 패널 정렬 */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 2. 섭씨/화씨 토글 스위치 디자인 */
+.toggle-container {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2b7a78; /* 기본 배경 (섭씨) */
+  transition: 0.4s;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.toggle-ball {
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* 체크되었을 때 (화씨) 스타일 변화 */
+.toggle-input:checked + .toggle-label {
+  background-color: #ff7e67; /* 화씨일 때 주황색 */
+}
+
+.toggle-input:checked + .toggle-label .toggle-ball {
+  transform: translateX(30px); /* 공 이동 */
+}
+
+/* 3. 햄버거 버튼 스타일 */
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: #fff; /* 글자색 (배경이 어두울 때 대비) */
+  cursor: pointer;
+  display: none; /* 데스크탑에서는 일단 숨김 (필요하면 flex로 변경) */
+}
+
+/* 모바일 화면에서만 햄버거 보이기 */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: block;
+  }
+  /* 모바일에서 토글이나 로고 배치 조정 */
+  .navbar {
+    padding: 15px 20px;
+  }
+
+  /* 모바일 메뉴 박스 디자인 */
+  .mobile-menu {
+    position: absolute;
+    top: 100%; /* Navbar 바로 아래 */
+    left: 0;
+    width: 100%;
+    background: rgba(23, 37, 42, 0.95);
+    flex-direction: column;
+    padding: 20px;
+    display: none; /* 평소엔 숨김 */
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-menu.active {
+    display: flex; /* active 클래스 붙으면 보임 */
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .mobile-menu a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 스크롤 되어서 배경이 생겼을 때 햄버거 버튼 색상 */
+.navbar.scrolled .hamburger-btn {
+  color: #fff;
+}
+/* 맨 위(투명 배경)일 때도 잘 보이게 흰색 유지 (HTML 구조상 헤더 글씨색을 따름) */
+
 /* 히어로 내부 컨텐츠 (검색창 등) */
 .hero-content {
   position: relative;

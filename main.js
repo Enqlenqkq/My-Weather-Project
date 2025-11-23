@@ -1,6 +1,10 @@
 // main.js
 console.log("main script loaded.");
 
+let currentData = null;
+let currentForecast = null;
+let isMetric = true; // true = 섭씨, false = 화씨
+
 // 날씨 아이콘 로드
 const iconMap = {
   "01d": "clear-day", // 맑음 (낮)
@@ -73,7 +77,7 @@ function displayWeather(data) {
         <div class="weather-card">
             <h2>${data.name}</h2>
             <img src="${iconUrl}" alt="날씨 아이콘">
-            <h1 class="temp">${Math.round(data.main.temp)}°C</h1>
+            <h1 class="temp">${getTemp(data.main.temp)}${getUnitText()}</h1>
             <p class="desc">${data.weather[0].description}</p>
             <div class="details">
                 <span>💧 습도 ${data.main.humidity}%</span>
@@ -116,7 +120,7 @@ function displayForecast(data) {
       <div class="forecast-card">
         <div class="day">${dayName}</div>
         <img src="${iconUrl}" alt="icon">
-        <div class="temp">${temp}°C</div>
+        <div class="temp">${getTemp(item.main.temp)}${getUnitText()}</div>
       </div>
     `;
     forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
@@ -143,13 +147,14 @@ document.querySelector("#searchBtn").addEventListener("click", async () => {
 
   try {
     const weatherData = await getWeather(city);
-    displayWeather(weatherData);
+    currentData = weatherData;
+    displayWeather(currentData);
 
     const forecastData = await getForecast(city);
-    displayForecast(forecastData);
+    currentForecast = forecastData;
+    displayForecast(currentForecast);
 
-    const cityName = weatherData.name;
-    saveHistory(cityName);
+    saveHistory(weatherData.name);
   } catch (error) {
     handleError(error);
   }
@@ -201,11 +206,13 @@ function renderHistory() {
       try {
         // 2. 현재 날씨 가져오기
         const weatherData = await getWeather(city);
-        displayWeather(weatherData);
+        currentData = weatherData;
+        displayWeather(currentData);
 
         // 3. [추가됨] 예보 데이터 가져오기
         const forecastData = await getForecast(city);
-        displayForecast(forecastData);
+        currentForecast = forecastData;
+        displayForecast(currentForecast);
       } catch (error) {
         handleError(error);
       }
@@ -248,3 +255,30 @@ window.addEventListener("scroll", () => {
     navbar.classList.remove("scrolled");
   }
 });
+
+const hamburgerBtn = document.querySelector(".hamburger-btn");
+const mobileMenu = document.querySelector("#mobileMenu");
+
+hamburgerBtn.addEventListener("click", () => {
+  mobileMenu.classList.toggle("active");
+});
+
+const unitToggle = document.querySelector("#unitToggle");
+
+unitToggle.addEventListener("change", () => {
+  isMetric = !unitToggle.checked;
+  if (currentData) displayWeather(currentData);
+  if (currentForecast) displayForecast(currentForecast);
+});
+
+function getTemp(temp) {
+  if (isMetric) {
+    return Math.round(temp);
+  } else {
+    return Math.round(temp * 1.8 + 32);
+  }
+}
+
+function getUnitText() {
+  return isMetric ? "°C" : "°F";
+}
