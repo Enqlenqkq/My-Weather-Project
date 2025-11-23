@@ -24,7 +24,7 @@ const iconMap = {
 };
 
 function getIconPath(code) {
-  const fileName = iconmap[code] || "clear-day";
+  const fileName = iconMap[code] || "clear-day";
   return `./images/weather-icons/animated/${fileName}.svg`;
 }
 
