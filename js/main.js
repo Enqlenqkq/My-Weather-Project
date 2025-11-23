@@ -1,5 +1,5 @@
 // js/main.js
-import { getWeather, getForecast } from "./api";
+import { getWeather, getForecast } from "./api.js";
 import {
   displayWeather,
   displayForecast,
@@ -7,8 +7,8 @@ import {
   handleError,
   saveHistory,
   renderHistory,
-} from "./ui";
-import { preloadImages } from "./utils";
+} from "./ui.js";
+import { preloadImages } from "./utils.js";
 
 let currentData = null;
 let currentForecast = null;

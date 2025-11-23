@@ -1,5 +1,5 @@
 // js/ui.js
-import { getIconPath, getTemp } from "./utils";
+import { getIconPath, getTemp } from "./utils.js";
 
 // 현재 날씨 표시 함수
 export function displayWeather(data, isMetric) {
