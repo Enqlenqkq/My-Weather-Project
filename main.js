@@ -85,6 +85,7 @@ function displayWeather(data) {
             </div>
         </div>
     `;
+  changeBackground(data.weather[0].main, data.weather[0].icon);
 }
 
 // 예보 날씨 표시 함수
