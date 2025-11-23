@@ -284,7 +284,7 @@ function getUnitText() {
 }
 
 function changeBackground(weatherMain, iconCode) {
-  const heroSection = document.querySelector(".hero-section");
+  const heroSection = document.querySelector("#hero-section");
   let bgImage = "default.jpg"; // 기본값
 
   const isNight = iconCode.includes("n");
