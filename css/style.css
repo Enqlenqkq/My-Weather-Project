@@ -40,25 +40,7 @@ body {
   background: rgba(0, 0, 0, 0.3); /* 30% 어두운 막 */
 }
 
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px 40px;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  transition: all 0.3s ease-in-out;
-}
-
-.navbar.scrolled {
-  background-color: rgba(23, 37, 42, 0.9);
-  padding: 15px 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
+/* 로고 디자인 */
 .logo {
   color: #fff;
   font-size: 1.5rem;
@@ -77,27 +59,77 @@ body {
   height: 3rem;
 }
 
-/* [style.css] 추가 내용 */
-
-/* 1. 컨트롤 패널 정렬 */
-.nav-controls {
+/* navbar 디자인 */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 40px;
+  z-index: 1000;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* 2. 섭씨/화씨 토글 스위치 디자인 */
-.toggle-container {
+.navbar.scrolled {
+  background-color: rgba(23, 37, 42, 0.95);
+  padding: 10px 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 오른쪽 그룹 (메뉴 + 스위치 + 햄버거) 정렬 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* 요소 사이 간격 */
+}
+
+/* 1. 데스크톱 메뉴 스타일 */
+.desktop-menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.desktop-menu a {
+  text-decoration: none;
+  color: #fff; /* 흰색 글씨 */
+  font-weight: 700;
+  font-size: 1rem;
   position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 30px;
+  transition: color 0.3s;
+}
+
+/* 메뉴에 마우스 올리면 밑줄 쫙 */
+.desktop-menu a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #fff;
+  transition: width 0.3s;
+}
+
+.desktop-menu a:hover::after {
+  width: 100%;
+}
+
+/* 2. 섭씨/화씨 스위치 (텍스트 보이게 수정됨) */
+.toggle-wrapper {
+  position: relative;
+  width: 64px;
+  height: 32px;
 }
 
 .toggle-input {
   opacity: 0;
   width: 0;
   height: 0;
+  position: absolute;
 }
 
 .toggle-label {
@@ -107,101 +139,108 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #2b7a78; /* 기본 배경 (섭씨) */
-  transition: 0.4s;
+  background-color: #2b7a78; /* 기본 색상 */
   border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
-  font-size: 12px;
-  font-weight: bold;
-  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: 0.4s;
 }
 
+/* 스위치 안의 텍스트 배치 */
+.label-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.8);
+  user-select: none; /* 드래그 방지 */
+}
+
+.label-text.c {
+  right: 10px;
+} /* 공이 왼쪽에 있을 때 보이는 C는 오른쪽에 배치 */
+.label-text.f {
+  left: 10px;
+} /* 공이 오른쪽에 있을 때 보이는 F는 왼쪽에 배치 */
+
+/* 하얀색 공 */
 .toggle-ball {
   position: absolute;
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 2px;
   background-color: white;
-  transition: 0.4s;
   border-radius: 50%;
+  transition: 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* 통통 튀는 효과 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 2; /* 글씨보다 위에 */
 }
 
-/* 체크되었을 때 (화씨) 스타일 변화 */
+/* 체크되었을 때 (화씨 모드) */
 .toggle-input:checked + .toggle-label {
-  background-color: #ff7e67; /* 화씨일 때 주황색 */
+  background-color: #e17055; /* 주황색 */
 }
 
 .toggle-input:checked + .toggle-label .toggle-ball {
-  transform: translateX(30px); /* 공 이동 */
+  transform: translateX(32px); /* 공 이동 */
 }
 
-/* 3. 햄버거 버튼 스타일 */
+/* 3. 반응형 (모바일) 설정 */
 .hamburger-btn {
+  display: none; /* PC에선 숨김 */
   background: none;
   border: none;
-  color: #fff; /* 글자색 (배경이 어두울 때 대비) */
+  color: white;
   cursor: pointer;
-  display: none; /* 데스크탑에서는 일단 숨김 (필요하면 flex로 변경) */
 }
 
-/* 모바일 화면에서만 햄버거 보이기 */
+.mobile-menu {
+  display: none; /* PC에선 숨김 */
+}
+
+/* 화면이 768px보다 작아지면 (모바일/태블릿) */
 @media (max-width: 768px) {
-  .hamburger-btn {
-    display: block;
-  }
-  /* 모바일에서 토글이나 로고 배치 조정 */
-  .navbar {
-    padding: 15px 20px;
+  .desktop-menu {
+    display: none; /* PC 메뉴 숨김 */
   }
 
-  /* 모바일 메뉴 박스 디자인 */
+  .hamburger-btn {
+    display: block; /* 햄버거 보임 */
+  }
+
+  /* 모바일 메뉴 드롭다운 스타일 */
   .mobile-menu {
     position: absolute;
-    top: 100%; /* Navbar 바로 아래 */
+    top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(23, 37, 42, 0.95);
+    background: rgba(23, 37, 42, 0.98);
     flex-direction: column;
-    padding: 20px;
-    display: none; /* 평소엔 숨김 */
-    text-align: center;
+    align-items: center;
+    padding: 20px 0;
     backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .mobile-menu.active {
-    display: flex; /* active 클래스 붙으면 보임 */
-    animation: slideDown 0.3s ease-out;
+    display: flex; /* JS에서 active 붙이면 보임 */
   }
 
   .mobile-menu a {
     color: white;
     text-decoration: none;
-    padding: 15px;
     font-size: 1.2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    transition: background 0.2s;
   }
-}
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 }
-
-/* 스크롤 되어서 배경이 생겼을 때 햄버거 버튼 색상 */
-.navbar.scrolled .hamburger-btn {
-  color: #fff;
-}
-/* 맨 위(투명 배경)일 때도 잘 보이게 흰색 유지 (HTML 구조상 헤더 글씨색을 따름) */
 
 /* 히어로 내부 컨텐츠 (검색창 등) */
 .hero-content {

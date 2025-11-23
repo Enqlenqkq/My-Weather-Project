@@ -21,15 +21,23 @@
           <img src="./images/logo_no_bg.png" alt="로고" />
           <span>나만의 <strong>날씨</strong> 앱</span>
         </div>
-        <div class="nav-controls">
-          <div class="toggle-container">
+
+        <div class="nav-right">
+          <ul class="desktop-menu">
+            <li><a href="#">홈</a></li>
+            <li><a href="#">날씨 지도</a></li>
+            <li><a href="#">설정</a></li>
+          </ul>
+
+          <div class="toggle-wrapper">
             <input type="checkbox" id="unitToggle" class="toggle-input" />
             <label for="unitToggle" class="toggle-label">
               <span class="toggle-ball"></span>
-              <span class="text-c"></span>
-              <span class="text-f"></span>
+              <span class="label-text c">°C</span>
+              <span class="label-text f">°F</span>
             </label>
           </div>
+
           <button class="hamburger-btn" aria-label="메뉴 열기">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -48,11 +56,11 @@
             </svg>
           </button>
         </div>
+
         <div class="mobile-menu" id="mobileMenu">
           <a href="#">홈</a>
           <a href="#">날씨 지도</a>
           <a href="#">설정</a>
-          <a href="https://github.com/본인아이디" target="_blank">Github</a>
         </div>
       </nav>
 
