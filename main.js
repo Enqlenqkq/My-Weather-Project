@@ -302,7 +302,7 @@ function changeBackground(weatherMain, iconCode) {
       case "Mist":
       case "Haze":
       case "Fog":
-        bgImage = "fog.jpg";
+        bgImage = "clouds.jpg";
         break;
       case "Rain":
         bgImage = "rain.jpg";
