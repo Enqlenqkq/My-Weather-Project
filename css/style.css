@@ -19,9 +19,10 @@ body {
   position: relative;
   width: 100%;
   height: 50vh; /* 화면 높이의 50% 차지 */
-  background-image: url("../images/bg_sky.jpg"); /* 로컬 이미지 사용 */
   background-size: cover; /* 꽉 채우기 */
   background-position: center;
+  background-repeat: no-repeat;
+  transition: backgroung-image 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -282,3 +282,42 @@ function getTemp(temp) {
 function getUnitText() {
   return isMetric ? "°C" : "°F";
 }
+
+function changeBackground(weatherMain, iconCode) {
+  const heroSection = document.querySelector(".hero-section");
+  let bgImage = "default.jpg"; // 기본값
+
+  const isNight = iconCode.includes("n");
+
+  if (isNight) {
+    bgImage = "night.jpg"; // 밤이면 무조건 밤 배경
+  } else {
+    switch (weatherMain) {
+      case "Clear":
+        bgImage = "clear.jpg";
+        break;
+      case "Clouds":
+        bgImage = "clouds.jpg";
+      case "Mist":
+      case "Haze":
+      case "Fog":
+        bgImage = "fog.jpg";
+        break;
+      case "Rain":
+        bgImage = "rain.jpg";
+        break;
+      case "Drizzle":
+        bgImage = "rain.jpg";
+        break;
+      case "Thunderstorm":
+        bgImage = "thunder.jpg";
+        break;
+      case "Snow":
+        bgImage = "snow.jpg";
+        break;
+      default:
+        bgImage = "default.jpg";
+    }
+  }
+  heroSection.style.backgroundImage = `url('./images/backgrounds/${bgImage}')`;
+}
