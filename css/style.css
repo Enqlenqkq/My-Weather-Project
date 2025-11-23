@@ -22,7 +22,7 @@ body {
   background-size: cover; /* 꽉 채우기 */
   background-position: center;
   background-repeat: no-repeat;
-  transition: backgroung-image 0.5s ease-in-out;
+  transition: background-image 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: center;
