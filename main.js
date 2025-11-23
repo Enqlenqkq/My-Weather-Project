@@ -1,6 +1,33 @@
 // main.js
 console.log("main script loaded.");
 
+// 날씨 아이콘 로드
+const iconMap = {
+  "01d": "clear-day", // 맑음 (낮)
+  "01n": "clear-night", // 맑음 (밤)
+  "02d": "cloudy-1-day", // 구름 조금 (낮)
+  "02n": "cloudy-1-night", // 구름 조금 (밤)
+  "03d": "cloudy-3-day", // 구름 많음
+  "03n": "cloudy-3-night",
+  "04d": "cloudy", // 흐림 (먹구름) -> overcast나 cloudy 사용
+  "04n": "cloudy",
+  "09d": "rainy-2-day", // 소나기
+  "09n": "rainy-2-night",
+  "10d": "rainy-3-day", // 비 (낮)
+  "10n": "rainy-3-night", // 비 (밤)
+  "11d": "thunderstorms", // 천둥번개
+  "11n": "thunderstorms",
+  "13d": "snowy-3-day", // 눈
+  "13n": "snowy-3-night",
+  "50d": "fog-day", // 안개
+  "50n": "fog-night",
+};
+
+function getIconPath(code) {
+  const fileName = iconmap[code] || "clear-day";
+  return `./images/weather-icons/animated/${fileName}.svg`;
+}
+
 // API 호출 및 데이터 처리
 // 현재 날씨 가져오기
 async function getWeather(city) {
@@ -39,7 +66,7 @@ function displayWeather(data) {
 
   // 날씨 아이콘 URL 생성
   const iconCode = data.weather[0].icon;
-  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+  const iconUrl = getIconPath(iconCode);
 
   // HTML 업데이트 (카드 디자인 적용)
   weatherResultDiv.innerHTML = `
@@ -83,7 +110,7 @@ function displayForecast(data) {
     const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
     const temp = Math.round(item.main.temp);
     const iconCode = item.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    const iconUrl = getIconPath(iconCode);
 
     const cardHtml = `
       <div class="forecast-card">
