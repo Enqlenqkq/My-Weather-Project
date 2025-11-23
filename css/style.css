@@ -42,8 +42,14 @@ body {
   background: rgba(0, 0, 0, 0.3); /* 30% 어두운 막 */
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 /* 로고 디자인 */
-.logo {
+.title-logo {
   color: #fff;
   font-size: 1.5rem;
   font-weight: 300; /* Light */
@@ -53,11 +59,11 @@ body {
   gap: 10px;
 }
 
-.logo strong {
+.title-logo strong {
   font-weight: 800; /* ExtraBold */
 }
 
-.logo img {
+.title-logo img {
   height: 3rem;
 }
 
