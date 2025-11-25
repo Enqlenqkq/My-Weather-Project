@@ -375,7 +375,7 @@ input {
 /* 온도: 오른쪽으로 살짝 이동하며 크기 줄임 */
 .weather-card.expanded .temp {
   font-size: 2.5rem;
-  transform: translateX(30px) translateY(-60px); /* 아이콘 옆으로 이동 */
+  transform: translateX(30px) translateY(-100px); /* 아이콘 옆으로 이동 */
 }
 
 /* 설명: 위치 조정 */
