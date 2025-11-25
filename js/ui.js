@@ -3,28 +3,67 @@ import { getIconPath, getTemp } from "./utils.js";
 
 // 현재 날씨 표시 함수
 export function displayWeather(data, isMetric) {
-  // weather-result 부분 선택
   const weatherResultDiv = document.querySelector("#weather-result");
-  const unitText = isMetric ? "°C" : "°F";
+  const unitTemp = isMetric ? "°C" : "°F";
+  const unitSpeed = isMetric ? "m/s" : "mph";
+
+  // 1. 아이콘 경로 및 온도 계산
+  const iconCode = data.weather[0].icon;
+  const iconUrl = `./images/icons/${iconCode}.svg`; // 또는 기존 경로 유지
   const tempValue = getTemp(data.main.temp, isMetric);
 
-  // 날씨 아이콘 URL 생성
-  const iconCode = data.weather[0].icon;
-  const iconUrl = getIconPath(iconCode);
-
-  // HTML 업데이트 (카드 디자인 적용)
+  // 2. HTML 구조 생성
+  // weather-header: 항상 보이는 부분
+  // weather-details: 평소엔 숨겨져 있다가 열리는 부분
   weatherResultDiv.innerHTML = `
-        <div class="weather-card">
-            <h2>${data.name}</h2>
-            <img src="${iconUrl}" alt="날씨 아이콘">
-            <h1 class="temp">${tempValue}${unitText}</h1>
+    <div class="weather-card" id="weatherCard">
+        
+        <div class="weather-header">
+            <h2 class="city-name">${data.name}</h2>
+            <img src="${iconUrl}" alt="날씨 아이콘" class="main-icon">
+            <h1 class="temp">${tempValue}${unitTemp}</h1>
             <p class="desc">${data.weather[0].description}</p>
-            <div class="details">
-                <span>💧 습도 ${data.main.humidity}%</span>
-                <span>💨 풍속 ${data.wind.speed}m/s</span>
+        </div>
+
+        <div class="weather-details">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span>🌡️ 체감</span>
+                    <strong>${getTemp(
+                      data.main.feels_like,
+                      isMetric
+                    )}${unitTemp}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>💧 습도</span>
+                    <strong>${data.main.humidity}%</strong>
+                </div>
+                <div class="detail-item">
+                    <span>💨 풍속</span>
+                    <strong>${data.wind.speed} ${unitSpeed}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>📏 기압</span>
+                    <strong>${data.main.pressure} hPa</strong>
+                </div>
             </div>
         </div>
-    `;
+
+        <div class="expand-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+    </div>
+  `;
+
+  // 3. 클릭 이벤트 연결 (토글 기능)
+  const card = document.getElementById("weatherCard");
+  card.addEventListener("click", () => {
+    card.classList.toggle("expanded"); // 'expanded' 클래스를 넣었다 뺐다 함
+  });
+
+  // 배경 변경
   changeBackground(data.weather[0].main, data.weather[0].icon);
 }
 
