@@ -317,7 +317,6 @@ input {
 }
 .main-icon {
   width: 120px;
-  height: 120px;
   transition: all 0.5s ease; /* 아이콘 크기/위치 변경 애니메이션 */
 }
 .temp {
@@ -369,9 +368,8 @@ input {
 /* 아이콘: 왼쪽 위로 이동하면서 작아짐 */
 /* transform을 쓰면 레이아웃을 깨지 않고 이동시킬 수 있습니다 */
 .weather-card.expanded .main-icon {
-  width: 60px; /* 크기 줄임 */
-  height: 60px;
-  transform: translateX(-120px) translateY(-10px); /* 왼쪽으로 이동 */
+  width: 100px; /* 크기 줄임 */
+  transform: translateX(-100px) /*translateY(-10px)*/; /* 왼쪽으로 이동 */
 }
 
 /* 온도: 오른쪽으로 살짝 이동하며 크기 줄임 */
