@@ -207,82 +207,34 @@ body {
   display: none; /* PC에선 숨김 */
 }
 
-/* 화면이 768px보다 작아지면 (모바일/태블릿) */
+/* --- 모바일 (태블릿 포함) 반응형 스타일 --- */
 @media (max-width: 768px) {
-  /* 1. 전체 컨테이너 여백 조정 */
+  /* 1. 레이아웃 조정 */
   .hero-section {
-    height: auto; /* 높이 자동 (내용만큼 늘어남) */
-    min-height: 50vh; /* 최소 높이 보장 */
+    min-height: auto;
     padding-bottom: 40px;
   }
 
-  .hero-content {
-    width: 100%; /* 컨텐츠 너비 꽉 채우기 */
-    padding: 0 20px; /* 좌우 여백 살짝 줌 */
-    margin-top: 80px; /* Navbar와 겹치지 않게 아래로 내림 */
-  }
-
-  /* 2. Navbar (상단 바) 여백 줄이기 */
-  .navbar {
-    padding: 10px 20px; /* PC보다 좁게 설정 */
-  }
-
-  /* 3. 검색창이 화면 밖으로 나가는 문제 해결 (핵심!) */
-  .search-box {
-    width: 100%; /* 부모(hero-content) 너비에 맞춤 */
-    max-width: 100%; /* 절대 화면을 넘지 않음 */
-    box-sizing: border-box; /* 테두리 포함 크기 계산 */
-  }
-
-  .search-box input {
-    width: 100%; /* 입력창도 유동적으로 줄어듦 */
-    min-width: 0; /* 플렉스 박스에서 찌그러짐 방지 */
-    font-size: 1rem; /* 모바일에서 글씨 크기 적절하게 */
-  }
-
-  /* 4. 날씨 카드 크기 및 여백 최적화 */
   .container {
-    margin-top: -20px; /* 위로 살짝 겹치게 */
     padding: 0 15px;
+    margin-top: -30px;
   }
 
-  .weather-card {
-    padding: 25px 15px; /* 내부 여백 줄임 */
+  /* 2. Navbar 여백 및 검색창 꽉 채우기 */
+  .navbar {
+    padding: 15px 20px;
   }
 
-  .weather-card h2 {
-    font-size: 1.8rem; /* 도시 이름 크기 조절 */
+  .search-box {
+    width: 100%;
+    max-width: 100%;
   }
 
-  .weather-card .temp {
-    font-size: 3.5rem; /* 온도 크기 조절 */
+  .nav-right {
+    gap: 15px;
   }
 
-  /* 5. 예보 카드 가로 스크롤 (넷플릭스 스타일) */
-  /* 세로로 길게 쌓이는 것보다 옆으로 넘기는 게 모바일에선 더 예쁩니다 */
-  .forecast-container {
-    display: flex;
-    flex-wrap: nowrap; /* 줄바꿈 금지 */
-    overflow-x: auto; /* 가로 스크롤 허용 */
-    justify-content: flex-start; /* 왼쪽부터 정렬 */
-    gap: 10px;
-    padding-bottom: 15px; /* 스크롤바 공간 확보 */
-
-    /* 스크롤바 숨기기 (선택사항) */
-    -ms-overflow-style: none; /* IE, Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  .forecast-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
-  }
-
-  .forecast-card {
-    min-width: 100px; /* 카드가 찌그러지지 않게 최소 너비 확보 */
-    flex-shrink: 0; /* 크기 줄어듦 방지 */
-  }
-
-  /* 6. 모바일 메뉴 등 나머지 설정 */
+  /* PC 메뉴 숨기고 햄버거 보이기 */
   .desktop-menu {
     display: none;
   }
@@ -290,21 +242,89 @@ body {
     display: block;
   }
 
-  .mobile-menu {
-    position: absolute;
-    top: 60px; /* Navbar 높이만큼 내림 */
-    left: 0;
-    width: 100%;
-    background: rgba(23, 37, 42, 0.98);
-    flex-direction: column;
-    padding: 20px 0;
-    backdrop-filter: blur(10px);
-    display: none;
-    z-index: 999;
+  /* 3. [핵심] 예보 카드 가로 스크롤 고치기 */
+  .forecast-container {
+    display: flex;
+    flex-wrap: nowrap; /* 줄바꿈 절대 금지 */
+    overflow-x: auto; /* 가로 스크롤 허용 */
+    justify-content: flex-start; /* 왼쪽부터 차례로 정렬 */
+    gap: 12px;
+    padding: 10px 5px; /* 그림자 잘리지 않게 여백 */
+
+    /* 스크롤 부드럽게 (스냅 효과) */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; /* 아이폰 스크롤 부드럽게 */
+
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
+  .forecast-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .forecast-card {
+    min-width: 110px; /* ★ 중요: 카드가 찌그러지지 않게 최소 너비 고정 */
+    flex-shrink: 0; /* ★ 중요: 화면이 좁아도 절대 줄어들지 않음 (이게 핵심!) */
+    scroll-snap-align: start; /* 스크롤할 때 카드 단위로 딱딱 멈춤 */
+  }
+
+  /* 4. 햄버거 메뉴 꾸미기 (디자인 업그레이드) */
+  .mobile-menu {
+    position: fixed; /* 화면에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* 화면 전체 덮기 */
+    background: rgba(23, 37, 42, 0.95); /* 아주 진한 청록색 배경 */
+    backdrop-filter: blur(15px); /* 뒤쪽 흐리게 */
+    z-index: 999; /* 제일 위에 */
+
+    /* 배치 설정 */
+    display: none; /* 평소엔 숨김 */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    /* 애니메이션 */
+    transition: opacity 0.3s ease;
+  }
+
+  /* JS에서 active 클래스를 붙이면 나타남 */
   .mobile-menu.active {
     display: flex;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* 메뉴 링크 스타일 */
+  .mobile-menu a {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    padding: 10px 30px;
+    border-radius: 50px;
+    transition: background 0.3s;
+  }
+
+  /* 메뉴 눌렀을 때 효과 */
+  .mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ff7e67; /* 포인트 컬러 */
+  }
+}
+
+/* 메뉴 나타나는 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
