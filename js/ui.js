@@ -8,8 +8,7 @@ export function displayWeather(data, isMetric) {
   const unitSpeed = isMetric ? "m/s" : "mph";
 
   // 1. 아이콘 경로 및 온도 계산
-  const iconCode = data.weather[0].icon;
-  const iconUrl = `./images/weather-icons/animated/${iconCode}.svg`; // 또는 기존 경로 유지
+  const iconUrl = getIconPath(data.weather[0].icon);
   const tempValue = getTemp(data.main.temp, isMetric);
 
   // 2. HTML 구조 생성
