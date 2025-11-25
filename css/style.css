@@ -207,127 +207,6 @@ body {
   display: none; /* PC에선 숨김 */
 }
 
-/* --- 모바일 (태블릿 포함) 반응형 스타일 --- */
-@media (max-width: 768px) {
-  /* 1. 레이아웃 조정 */
-  .hero-section {
-    min-height: auto;
-    padding-bottom: 40px;
-  }
-
-  .container {
-    padding: 0 15px;
-    margin-top: -30px;
-  }
-
-  /* 2. Navbar 여백 및 검색창 꽉 채우기 */
-  .navbar {
-    padding: 15px 20px;
-  }
-
-  .search-box {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .nav-right {
-    gap: 15px;
-  }
-
-  /* PC 메뉴 숨기고 햄버거 보이기 */
-  .desktop-menu {
-    display: none;
-  }
-  .hamburger-btn {
-    display: block;
-  }
-
-  /* 3. [핵심] 예보 카드 가로 스크롤 고치기 */
-  .forecast-container {
-    display: flex;
-    flex-wrap: nowrap; /* 줄바꿈 절대 금지 */
-    overflow-x: auto; /* 가로 스크롤 허용 */
-    justify-content: flex-start; /* 왼쪽부터 차례로 정렬 */
-    gap: 12px;
-    padding: 10px 5px; /* 그림자 잘리지 않게 여백 */
-
-    /* 스크롤 부드럽게 (스냅 효과) */
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; /* 아이폰 스크롤 부드럽게 */
-
-    /* 스크롤바 숨기기 */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .forecast-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  .forecast-card {
-    min-width: 110px; /* ★ 중요: 카드가 찌그러지지 않게 최소 너비 고정 */
-    flex-shrink: 0; /* ★ 중요: 화면이 좁아도 절대 줄어들지 않음 (이게 핵심!) */
-    scroll-snap-align: start; /* 스크롤할 때 카드 단위로 딱딱 멈춤 */
-  }
-
-  /* 4. 햄버거 메뉴 꾸미기 (디자인 업그레이드) */
-  .mobile-menu {
-    position: fixed; /* 화면에 고정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh; /* 화면 전체 덮기 */
-    background: rgba(23, 37, 42, 0.95); /* 아주 진한 청록색 배경 */
-    backdrop-filter: blur(15px); /* 뒤쪽 흐리게 */
-    z-index: 999; /* 제일 위에 */
-
-    /* 배치 설정 */
-    display: none; /* 평소엔 숨김 */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-
-    /* 애니메이션 */
-    transition: opacity 0.3s ease;
-  }
-
-  /* JS에서 active 클래스를 붙이면 나타남 */
-  .mobile-menu.active {
-    display: flex;
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  /* 메뉴 링크 스타일 */
-  .mobile-menu a {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    text-decoration: none;
-    padding: 10px 30px;
-    border-radius: 50px;
-    transition: background 0.3s;
-  }
-
-  /* 메뉴 눌렀을 때 효과 */
-  .mobile-menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ff7e67; /* 포인트 컬러 */
-  }
-}
-
-/* 메뉴 나타나는 애니메이션 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* 히어로 내부 컨텐츠 (검색창 등) */
 .hero-content {
   position: relative;
@@ -411,6 +290,9 @@ input {
   padding: 0 20px;
   position: relative;
   z-index: 10;
+}
+
+.weather-result {
   text-decoration: none;
 }
 
@@ -516,25 +398,6 @@ input {
   }
 }
 
-/* 반응형 (모바일) */
-@media (max-width: 768px) {
-  .hero-section {
-    height: 40vh;
-  }
-  .hero-title {
-    font-size: 1.5rem;
-  }
-  .container {
-    margin-top: -40px;
-  }
-  .weather-card {
-    padding: 20px;
-  }
-  .weather-card .temp {
-    font-size: 3rem;
-  }
-}
-
 .history-container {
   margin-top: 25px;
   display: flex;
@@ -572,4 +435,124 @@ input {
   filter: none !important;
   /* 이미지 렌더링을 부드럽게 */
   image-rendering: -webkit-optimize-contrast;
+}
+
+/* style.css 맨 아래 모바일 섹션 수정 */
+
+@media (max-width: 768px) {
+  /* 1. 레이아웃 및 여백 조정 */
+  .hero-section {
+    min-height: auto;
+    padding-bottom: 40px;
+  }
+
+  .hero-content {
+    width: 100%;
+    padding: 0 20px; /* 좌우 여백 확보 */
+    margin-top: 80px;
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  }
+
+  /* 2. [문제 해결] 검색창 튀어나감 방지 */
+  .search-box {
+    width: 100%; /* 부모(hero-content) 너비에 딱 맞춤 */
+    max-width: 100%; /* 화면 넘어감 방지 */
+    display: flex; /* 내부 요소 가로 정렬 */
+    box-sizing: border-box;
+  }
+
+  .search-box input {
+    flex: 1; /* 남은 공간 다 차지하기 */
+    width: auto; /* 고정 너비 해제 */
+    min-width: 0; /* 플렉스 박스 찌그러짐 방지 */
+    font-size: 1rem;
+  }
+
+  /* 3. Navbar 여백 조정 */
+  .navbar {
+    padding: 15px 20px;
+  }
+
+  /* PC 메뉴 숨김 */
+  .desktop-menu {
+    display: none;
+  }
+  .hamburger-btn {
+    display: block;
+  }
+
+  /* 4. 모바일 메뉴 (전체 화면 덮기) */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(23, 37, 42, 0.98); /* 진한 배경 */
+    backdrop-filter: blur(10px);
+    z-index: 2000; /* 제일 위에 */
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .mobile-menu.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* 5. [추가] 닫기(X) 버튼 스타일 */
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .close-btn:hover {
+    transform: rotate(90deg); /* 마우스 올리면 회전 */
+    color: #ff7e67;
+  }
+
+  /* 6. [추가] 메뉴 링크 밑줄 제거 */
+  .mobile-menu a {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none; /* ★ 밑줄 제거 핵심 코드 */
+    padding: 10px 30px;
+    border-radius: 50px;
+  }
+
+  .mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ff7e67;
+  }
+
+  /* 7. 예보 카드 가로 스크롤 (유지) */
+  .forecast-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 10px 5px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
+  }
+  .forecast-container::-webkit-scrollbar {
+    display: none;
+  } /* 크롬 스크롤바 숨김 */
+
+  .forecast-card {
+    min-width: 110px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
 }

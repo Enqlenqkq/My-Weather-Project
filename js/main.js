@@ -74,13 +74,28 @@ window.addEventListener("scroll", () => {
   }
 });
 
-const hamburgerBtn = document.querySelector(".hamburger-btn");
+// 요소 선택
 const mobileMenu = document.querySelector("#mobileMenu");
+const closeMenuBtn = document.querySelector("#closeMenuBtn");
+const hamburgerBtn = document.querySelector(".hamburger-btn");
 
+// 1. 햄버거 버튼 누르면 열기
 hamburgerBtn.addEventListener("click", () => {
-  mobileMenu.classList.toggle("active");
+  mobileMenu.classList.add("active"); // toggle 대신 add 사용 (확실하게 열기)
 });
 
+// 2. [추가] X 버튼 누르면 닫기
+closeMenuBtn.addEventListener("click", () => {
+  mobileMenu.classList.remove("active");
+});
+
+// 3. [추가] 메뉴 링크 누르면 자동으로 닫기 (UX 개선)
+// 메뉴 안의 모든 a 태그를 찾아서 클릭 이벤트 달기
+mobileMenu.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileMenu.classList.remove("active");
+  });
+});
 // 단위 토글 스위치
 document.querySelector("#unitToggle").addEventListener("change", () => {
   isMetric = !document.querySelector("#unitToggle").checked;
