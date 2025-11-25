@@ -1,23 +1,33 @@
 // js/api.js
 
-// 현재 날씨 가져오기
+// 도시 이름으로 날씨 가져오기
 export async function getWeather(city) {
-  // 도시 입력값 검증
   if (!city) throw new Error("도시 이름을 입력해주세요!");
+  const res = await fetch(`/api/get-weather?city=${city}`);
+  if (!res.ok) throw new Error("날씨 정보를 가져올 수 없습니다.");
+  return await res.json();
+}
 
-  // Vercel 서버리스 함수(중계기) 호출
-  const response = await fetch(`/api/get-weather?city=${city}`);
-
-  // HTTP 에러 처리
-  if (!response.ok) throw new Error("날씨 정보를 가져올 수 없습니다.");
-
-  // JSON 데이터 파싱 후 반환
-  return await response.json();
+// 좌표(위도/경도)로 날씨 가져오기
+export async function getWeatherByCoords(lat, lon) {
+  const res = await fetch(`/api/get-weather?lat=${lat}&lon=${lon}`);
+  if (!res.ok) throw new Error("위치 정보를 가져올 수 없습니다.");
+  return await res.json();
 }
 
 // 예보 데이터 가져오기
-export async function getForecast(city) {
-  const response = await fetch(`./api/get-weather?city=${city}&type=forecast`);
-  if (!response.ok) throw new Error(`예보 정보를 가져올 수 없습니다.`);
-  return await response.json();
+export async function getForecast(city, lat = null, lon = null) {
+  let query = city ? `city=${city}` : `lat=${lat}&lon=${lon}`;
+  const res = await fetch(`/api/get-weather?${query}&type=forecast`);
+  if (!res.ok) throw new Error("예보 정보를 가져올 수 없습니다.");
+  return await res.json();
+}
+
+// 미세먼지 데이터 가져오기
+export async function getAirQuality(lat, lon) {
+  const res = await fetch(
+    `/api/get-weather?lat=${lat}&lon=${lon}&type=air_pollution`
+  );
+  if (!res.ok) return null; // 미세먼지는 실패해도 메인 날씨는 보여주기 위해 null 반환
+  return await res.json();
 }
