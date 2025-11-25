@@ -9,7 +9,7 @@ export function displayWeather(data, isMetric) {
 
   // 1. 아이콘 경로 및 온도 계산
   const iconCode = data.weather[0].icon;
-  const iconUrl = `./images/icons/${iconCode}.svg`; // 또는 기존 경로 유지
+  const iconUrl = `./images/weather-icons/animated/${iconCode}.svg`; // 또는 기존 경로 유지
   const tempValue = getTemp(data.main.temp, isMetric);
 
   // 2. HTML 구조 생성
