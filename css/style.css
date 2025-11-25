@@ -411,6 +411,7 @@ input {
   padding: 0 20px;
   position: relative;
   z-index: 10;
+  text-decoration: none;
 }
 
 /* 날씨 카드 (현재 날씨) */
