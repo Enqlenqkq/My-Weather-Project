@@ -145,14 +145,14 @@ document.querySelector("#unitToggle").addEventListener("change", () => {
 
 // 대한민국 날씨 지도 구현
 const majorCities = [
-  { name: "Seoul", lat: 37.5665, lon: 126.978, top: "20%", left: "30%" },
-  { name: "Busan", lat: 35.1796, lon: 129.0756, top: "75%", left: "75%" },
-  { name: "Jeju", lat: 33.4996, lon: 126.5312, top: "90%", left: "25%" },
-  { name: "Incheon", lat: 37.4563, lon: 126.7052, top: "20%", left: "20%" },
-  { name: "Gangneung", lat: 37.7519, lon: 128.876, top: "15%", left: "65%" },
-  { name: "Daejeon", lat: 36.3504, lon: 127.3845, top: "45%", left: "40%" },
-  { name: "Gwangju", lat: 35.1595, lon: 126.8526, top: "70%", left: "30%" },
-  { name: "Daegu", lat: 35.8714, lon: 128.6014, top: "55%", left: "65%" },
+  { name: "서울", lat: 37.5665, lon: 126.978, top: "20%", left: "33%" },
+  { name: "부산", lat: 35.1796, lon: 129.0756, top: "63%", left: "77%" },
+  { name: "제주", lat: 33.4996, lon: 126.5312, top: "95%", left: "23%" },
+  { name: "인천", lat: 37.4563, lon: 126.7052, top: "22%", left: "18%" },
+  { name: "강릉", lat: 37.7519, lon: 128.876, top: "15%", left: "70%" },
+  { name: "대전", lat: 36.3504, lon: 127.3845, top: "43%", left: "41%" },
+  { name: "광주", lat: 35.1595, lon: 126.8526, top: "63%", left: "30%" },
+  { name: "대구", lat: 35.8714, lon: 128.6014, top: "50%", left: "67%" },
 ];
 
 const mapModal = document.querySelector("#koreaMapModal");
