@@ -14,7 +14,7 @@ body {
   color: #333;
 }
 
-/* 3. 상단 히어로 섹션 (배경 이미지 영역) */
+/* 상단 히어로 섹션 */
 .hero-section {
   position: relative;
   width: 100%;
@@ -34,7 +34,6 @@ body {
   padding-bottom: 80px; /* 아래쪽 여유 공간 확보 */
 }
 
-/* 배경 위에 검은색 틴트(Overlay)를 깔아서 글씨가 잘 보이게 함 */
 .hero-section::before {
   content: "";
   position: absolute;
@@ -43,12 +42,6 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.3); /* 30% 어두운 막 */
-}
-
-.card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
 }
 
 /* 로고 디자인 */
@@ -286,7 +279,50 @@ input {
   color: #333; /* 마우스 올리면 진하게 */
 }
 
-/* 4. 메인 컨텐츠 영역 */
+.history-container {
+  margin-top: 25px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 10px 5px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* 스크롤바 숨기기 (선택사항) */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.history-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.history-btn {
+  flex-shrink: 0; /* 공간 좁아도 줄어들지 않음 */
+  white-space: nowrap; /* 글자 줄바꿈 방지 */
+  background: rgba(255, 255, 255, 0.3); /* 반투명 흰색 */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+  border-radius: 10px;
+  color: #333;
+  font-family: "NanumSquareNeo", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease; /* 부드러운 움직임 */
+}
+
+/* 마우스 올렸을 때 효과 */
+.history-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px); /* 살짝 위로 뜸 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 메인 컨텐츠 영역 */
 .container {
   max-width: 1200px;
   margin: -60px auto 50px; /* 히어로 영역 위로 살짝 겹치게 (-60px) */
@@ -333,7 +369,46 @@ input {
   transition: all 0.5s ease;
   padding: 10px;
 }
-/* 2. 숨겨진 상세 정보 영역 (기본 상태) */
+.dust-good {
+  color: #1fa4ff;
+}
+.dust-normal {
+  color: #22bb22;
+}
+.dust-not-good {
+  color: #ffdd3d;
+}
+.dust-bad {
+  color: #ff7f00;
+}
+.dust-very-bad {
+  color: #fe3636;
+}
+.dust-danger {
+  color: #ff73ff;
+}
+
+.dust-info-box {
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 12px;
+  display: inline-flex;
+  flex-direction: column; /* 세로로 쌓기 */
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  transition: all 0.5s ease;
+}
+
+.dust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* 숨겨진 상세 정보 영역 (기본 상태) */
 .weather-details {
   max-height: 0; /* 높이를 0으로 해서 숨김 */
   opacity: 0; /* 투명하게 */
@@ -342,23 +417,7 @@ input {
   transition: all 0.5s ease; /* 스르륵 열리는 효과 */
 }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  padding: 10px 0;
-}
-
-.detail-item {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 15px;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-/* 3. 화살표 아이콘 (아래쪽에 작게 표시) */
+/* 화살표 아이콘 (아래쪽에 작게 표시) */
 .expand-icon {
   margin-top: 10px;
   color: black;
@@ -431,6 +490,72 @@ input {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
+.weather-card img,
+.forecast-card img {
+  /* 어떤 필터나 다크모드 확장 프로그램도 이미지 색상을 못 바꾸게 함 */
+  filter: none !important;
+  /* 이미지 렌더링을 부드럽게 */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* --- 상세 정보 (Visuals) 스타일 --- */
+.visual-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.detail-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px); /* 뒤가 흐릿하게 비침 */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* 얇은 유리 테두리 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+  border-radius: 20px;
+  padding: 20px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.3s;
+}
+
+.detail-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* 텍스트 스타일 */
+.detail-title {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.detail-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #222;
+}
+
+/* 일출/일몰 */
+.sun-time {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.7rem;
+  color: #555;
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+  width: 100%;
+  height: 150px;
+  margin-top: 20px;
+}
+
 /* 예보 컨테이너 (가로 스크롤 가능하게) */
 .forecast-container {
   display: flex;
@@ -482,59 +607,95 @@ input {
   }
 }
 
-.history-container {
-  margin-top: 25px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  padding: 10px 5px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+/* --- 대한민국 지도 스타일 --- */
+.modal-content.map-content {
+  background: #eef2f3;
+  max-width: 400px;
+  height: 600px;
+}
+.korea-map-bg {
+  position: relative;
   width: 100%;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-
-  /* 스크롤바 숨기기 (선택사항) */
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  height: 500px;
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/d/dc/Map_of_South_Korea-blank.svg"); /* 무료 지도 이미지 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto;
 }
-
-.history-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
-
-.history-btn {
-  flex-shrink: 0; /* 공간 좁아도 줄어들지 않음 */
-  white-space: nowrap; /* 글자 줄바꿈 방지 */
-  background: rgba(255, 255, 255, 0.3); /* 반투명 흰색 */
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  padding: 8px 16px;
-  border-radius: 10px;
+.map-pin {
+  width: 3rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
   color: #333;
-  font-family: "NanumSquareNeo", sans-serif;
-  font-weight: 700;
+  text-shadow: 0 0 5px white;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 13px;
+}
+.close-map {
+  float: right;
+  font-size: 28px;
   cursor: pointer;
-  transition: all 0.3s ease; /* 부드러운 움직임 */
 }
 
-/* 마우스 올렸을 때 효과 */
-.history-btn:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px); /* 살짝 위로 뜸 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.modal {
+  display: none; /* 평소엔 숨김 */
+  position: fixed;
+  z-index: 3000; /* 맨 위에 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* 뒷배경 어둡게 */
+  backdrop-filter: blur(5px); /* 뒷배경 흐리게 */
+  justify-content: center;
+  align-items: center;
 }
 
-.weather-card img,
-.forecast-card img {
-  /* 어떤 필터나 다크모드 확장 프로그램도 이미지 색상을 못 바꾸게 함 */
-  filter: none !important;
-  /* 이미지 렌더링을 부드럽게 */
-  image-rendering: -webkit-optimize-contrast;
+.modal.show {
+  display: flex;
+  animation: fadeIn 0.3s;
 }
 
-/* style.css 맨 아래 모바일 섹션 수정 */
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #1f2538;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a4b66;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #55698a;
+}
+
+/* 모바일 반응형 디자인*/
 @media (max-width: 768px) {
   /* 1. 레이아웃 및 여백 조정 */
   .hero-section {
@@ -656,215 +817,7 @@ input {
   }
 
   .visual-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* --- 상세 정보 (Visuals) 스타일 --- */
-.visual-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin: 30px 0;
-}
-
-.detail-card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px); /* 뒤가 흐릿하게 비침 */
-  border: 1px solid rgba(255, 255, 255, 0.4); /* 얇은 유리 테두리 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
-  border-radius: 20px;
-  padding: 20px 10px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: transform 0.3s;
-}
-
-.detail-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.35);
-}
-
-/* 텍스트 스타일 */
-.detail-title {
-  font-size: 0.9rem;
-  color: #555;
-  font-weight: 600;
-}
-
-.detail-value {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #222;
-}
-
-/* 습도 원형 게이지 (CSS만으로 구현) */
-.gauge-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: conic-gradient(#2b7a78 var(--percent), #ddd 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 5px;
-}
-.gauge-circle .inner {
-  width: 50px;
-  height: 50px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-/* 일출/일몰 */
-.sun-time {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 0.7rem;
-  color: #555;
-}
-
-/* 차트 컨테이너 */
-.chart-container {
-  width: 100%;
-  height: 150px;
-  margin-top: 20px;
-}
-
-/* --- 대한민국 지도 스타일 --- */
-.modal-content.map-content {
-  background: #eef2f3;
-  max-width: 400px;
-  height: 600px;
-}
-.korea-map-bg {
-  position: relative;
-  width: 100%;
-  height: 500px;
-  background-image: url("https://upload.wikimedia.org/wikipedia/commons/d/dc/Map_of_South_Korea-blank.svg"); /* 무료 지도 이미지 */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0 auto;
-}
-.map-pin {
-  width: 3rem;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-weight: bold;
-  color: #333;
-  text-shadow: 0 0 5px white;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 13px;
-}
-.close-map {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.modal {
-  display: none; /* 평소엔 숨김 */
-  position: fixed;
-  z-index: 3000; /* 맨 위에 */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* 뒷배경 어둡게 */
-  backdrop-filter: blur(5px); /* 뒷배경 흐리게 */
-  justify-content: center;
-  align-items: center;
-}
-
-.modal.show {
-  display: flex;
-  animation: fadeIn 0.3s;
-}
-
-.modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.dust-good {
-  color: #1fa4ff;
-}
-.dust-normal {
-  color: #22bb22;
-}
-.dust-not-good {
-  color: #ffdd3d;
-}
-.dust-bad {
-  color: #ff7f00;
-}
-.dust-very-bad {
-  color: #fe3636;
-}
-.dust-danger {
-  color: #ff73ff;
-}
-
-.dust-info-box {
-  margin-top: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  text-decoration: none;
-  padding: 8px 15px;
-  border-radius: 12px;
-  display: inline-flex;
-  flex-direction: column; /* 세로로 쌓기 */
-  gap: 4px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-align: left;
-  transition: all 0.5s ease;
-}
-
-.dust-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #1f2538;
-}
-::-webkit-scrollbar-thumb {
-  background: #3a4b66;
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #55698a;
 }
