@@ -139,7 +139,8 @@ mobileMenu.querySelectorAll("a").forEach((link) => {
 // 단위 토글 스위치
 document.querySelector("#unitToggle").addEventListener("change", () => {
   isMetric = !document.querySelector("#unitToggle").checked;
-  if (currentData) displayWeather(currentData, isMetric);
+  if (currentData)
+    displayWeather(currentData, currentForecast, currentAir, isMetric);
   if (currentForecast) displayForecast(currentForecast, isMetric);
 });
 

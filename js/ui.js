@@ -124,46 +124,50 @@ export function displayWeather(data, forecastData, airData, isMetric) {
                 <h1 class="temp">${tempValue}${unitTemp}</h1>
                 <p class="desc">${data.weather[0].description}</p>
                 
-                <!-- ▼ 기존 aqi-badge 대신 새로운 dust-info-box 적용 -->
                 <div class="dust-info-box">
                    ${pm10Html}
                    ${pm25Html}
                 </div>
-
               </div>
             </div>
         </div>
 
-        <!-- ... 아래 weather-details 부분은 기존 코드 그대로 유지 ... -->
         <div class="weather-details">
             <div class="visual-grid">
+                
                 <div class="detail-card">
-                   <span>💧 습도</span>
-                   <div class="gauge-circle" style="--percent: ${
-                     data.main.humidity
-                   }">
-                      <div class="inner">${data.main.humidity}%</div>
+                   <div class="detail-title">💧 습도</div>
+                   <div class="detail-value">${data.main.humidity}%</div>
+                </div>
+
+                <div class="detail-card">
+                   <div class="detail-title">☀️ 일출 / 일몰</div>
+                   <div class="detail-value" style="font-size: 1rem;">
+                      ${sunrise}<br>${sunset}
                    </div>
                 </div>
+
                 <div class="detail-card">
-                   <span>☀️ 일출/일몰</span>
-                   <div class="sun-time">
-                      <span>${sunrise}</span><span>${sunset}</span>
-                   </div>
+                   <div class="detail-title">💨 풍속</div>
+                   <div class="detail-value">${
+                     data.wind.speed
+                   } ${unitSpeed}</div>
                 </div>
+
                 <div class="detail-card">
-                   <span>🌧️ 강수량 / 💨 풍속</span>
-                   <div class="text-data">
-                      <strong>${data.rain ? data.rain["1h"] || 0 : 0}mm</strong>
-                      <p>풍속 ${data.wind.speed} ${unitSpeed}</p>
-                   </div>
+                   <div class="detail-title">🌧️ 강수량</div>
+                   <div class="detail-value">${
+                     data.rain ? data.rain["1h"] || 0 : 0
+                   }mm</div>
                 </div>
+
             </div>
+
             <div class="chart-container">
                <canvas id="hourlyChart"></canvas>
             </div>
         </div>
-        
+
         <div class="expand-icon">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
