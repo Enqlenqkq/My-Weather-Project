@@ -292,7 +292,7 @@ function renderChart(forecastData, isMetric) {
       scales: {
         x: {
           grid: { display: false },
-          ticks: { color: "#ccc", font: { family: "NanumSquareNeo" } },
+          ticks: { color: "black", font: { family: "NanumSquareNeo" } },
         },
         y: { display: false }, // Y축 숨김
       },
@@ -308,7 +308,7 @@ function renderChart(forecastData, isMetric) {
             meta.data.forEach((element, index) => {
               const data = dataset.data[index];
 
-              ctx.fillStyle = "#fff"; // 글씨 색상 (다크테마에 맞춰 흰색)
+              ctx.fillStyle = "black"; // 글씨 색상 (다크테마에 맞춰 흰색)
               ctx.font = "bold 12px NanumSquareNeo";
               ctx.textAlign = "center";
               ctx.textBaseline = "bottom";
