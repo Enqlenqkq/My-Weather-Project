@@ -10,7 +10,7 @@
 
 body {
   font-family: "NanumSquareNeo", sans-serif; /* 폰트 적용 */
-  background-color: #f4f7f6;
+  background-color: #1f2538;
   color: #333;
 }
 
@@ -301,8 +301,8 @@ input {
 
 /* 날씨 카드 (현재 날씨) */
 .weather-card {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
   border-radius: 25px;
   padding: 30px;
   text-align: center;
@@ -333,9 +333,6 @@ input {
   transition: all 0.5s ease;
   padding: 10px;
 }
-.aqi-badge {
-  transition: all 0.5s ease;
-}
 /* 2. 숨겨진 상세 정보 영역 (기본 상태) */
 .weather-details {
   max-height: 0; /* 높이를 0으로 해서 숨김 */
@@ -364,14 +361,14 @@ input {
 /* 3. 화살표 아이콘 (아래쪽에 작게 표시) */
 .expand-icon {
   margin-top: 10px;
-  color: #888;
+  color: black;
   transition: transform 0.5s ease;
   animation: bounce 2s infinite;
 }
 
 /* 카드 전체: 배경색 살짝 진하게 */
 .weather-card.expanded {
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   padding-bottom: 40px;
 }
@@ -395,8 +392,9 @@ input {
   opacity: 0.8;
 }
 
-.weather-card.expanded .aqi-badge {
+.weather-card.expanded .dust-info-box {
   transform: translateY(-60px);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* 상세 정보: 스르륵 열림 */
@@ -444,7 +442,7 @@ input {
 
 /* 예보 카드 */
 .forecast-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
   padding: 20px 15px;
   border-radius: 15px;
   width: 120px; /* 조금 더 넓게 */
@@ -667,7 +665,7 @@ input {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  margin-bottom: 20px;
+  margin: 30px 0;
 }
 
 .detail-card {
@@ -781,7 +779,7 @@ input {
 .modal {
   display: none; /* 평소엔 숨김 */
   position: fixed;
-  z-index: 2000; /* 맨 위에 */
+  z-index: 3000; /* 맨 위에 */
   left: 0;
   top: 0;
   width: 100%;
@@ -823,7 +821,7 @@ input {
 .dust-normal {
   color: #22bb22;
 }
-.dust-not-goot {
+.dust-not-good {
   color: #ffdd3d;
 }
 .dust-bad {
@@ -838,7 +836,8 @@ input {
 
 .dust-info-box {
   margin-top: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
   padding: 8px 15px;
   border-radius: 12px;
   display: inline-flex;
@@ -847,10 +846,25 @@ input {
   font-size: 0.9rem;
   font-weight: 700;
   text-align: left;
+  transition: all 0.5s ease;
 }
 
 .dust-item {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #1f2538;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a4b66;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #55698a;
 }

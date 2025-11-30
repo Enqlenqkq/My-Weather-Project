@@ -194,14 +194,66 @@ function renderChart(forecastData, isMetric) {
   // 기존 차트 파괴 (중복 방지)
   if (tempChart) tempChart.destroy();
 
-  // 24시간 데이터만 추출 (8개)
-  const slicedData = forecastData.list.slice(0, 8);
-  const labels = slicedData.map((item) => {
-    const date = new Date(item.dt * 1000);
-    return date.getHours() + "시";
-  });
-  const temps = slicedData.map((item) => getTemp(item.main.temp, isMetric));
+  // 1. 목표 시간대 생성 로직 (현재 -> 짝수 시간 -> 2시간 간격)
+  const targetTimes = [];
+  const now = new Date();
 
+  // 시작: 현재 시간 (정시로 맞춤)
+  let currentTime = new Date(now);
+  currentTime.setMinutes(0, 0, 0);
+  targetTimes.push(new Date(currentTime));
+
+  // 다음 짝수 시간 찾기
+  let nextHour = currentTime.getHours() + 1;
+  let nextTime = new Date(currentTime);
+
+  if (currentTime.getHours() % 2 !== 0) {
+    // 현재가 홀수 시(17시)면 -> 다음은 18시 (짝수)
+    nextTime.setHours(nextHour);
+  } else {
+    // 현재가 짝수 시(16시)면 -> 다음은 18시 (+2시간)
+    // *사용자 요청: 16시 -> 18시 -> 20시
+    nextTime.setHours(currentTime.getHours() + 2);
+  }
+
+  // 목표 시간 배열 채우기 (총 7~8개 포인트)
+  for (let i = 0; i < 7; i++) {
+    targetTimes.push(new Date(nextTime));
+    nextTime.setHours(nextTime.getHours() + 2); // 2시간씩 증가
+  }
+
+  // 2. 데이터 보간 (Interpolation) 로직
+  // API 데이터(3시간 간격) 사이의 값을 계산해서 2시간 간격 온도를 추정합니다.
+  const apiList = forecastData.list;
+
+  const labels = [];
+  const temps = [];
+
+  targetTimes.forEach((target) => {
+    const targetSec = Math.floor(target.getTime() / 1000);
+
+    // 타겟 시간을 감싸는 앞뒤 데이터 찾기
+    // API 데이터는 시간순 정렬되어 있다고 가정
+    for (let i = 0; i < apiList.length - 1; i++) {
+      const p1 = apiList[i];
+      const p2 = apiList[i + 1];
+
+      if (targetSec >= p1.dt && targetSec <= p2.dt) {
+        // 비율 계산 (시간 차이만큼 온도 비례 배분)
+        const ratio = (targetSec - p1.dt) / (p2.dt - p1.dt);
+
+        // 온도 보간 (섭씨/화씨 변환 전 원본 데이터로 계산 후 변환)
+        const interpolatedRawTemp =
+          p1.main.temp + (p2.main.temp - p1.main.temp) * ratio;
+
+        labels.push(target.getHours() + "시");
+        temps.push(getTemp(interpolatedRawTemp, isMetric));
+        break;
+      }
+    }
+  });
+
+  // 3. 차트 그리기 (데이터 라벨 플러그인 추가)
   tempChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -210,23 +262,64 @@ function renderChart(forecastData, isMetric) {
         {
           label: "온도",
           data: temps,
-          borderColor: "#2b7a78",
-          backgroundColor: "rgba(43, 122, 120, 0.2)",
+          borderColor: "#4db6ac", // 밝은 민트색
+          backgroundColor: "rgba(77, 182, 172, 0.2)",
           borderWidth: 2,
-          tension: 0.4, // 곡선
+          tension: 0.4, // 부드러운 곡선
           fill: true,
+          pointBackgroundColor: "#fff", // 포인트 흰색
+          pointBorderColor: "#4db6ac",
+          pointRadius: 4,
+          pointHoverRadius: 6,
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      layout: {
+        padding: { top: 30 }, // 위쪽 라벨 잘림 방지
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false }, // 툴팁 끄기 (직관적으로 숫자 보여주므로)
+
+        // [추가] 그래프 위에 숫자 그리기 플러그인 정의
+        dataLabels: {
+          // Chart.js 3.x 이상에서는 외부 플러그인 없이 afterDatasetsDraw로 직접 그림
+        },
+      },
       scales: {
-        x: { grid: { display: false } },
-        y: { display: false }, // Y축 숫자 숨김 (깔끔하게)
+        x: {
+          grid: { display: false },
+          ticks: { color: "#ccc", font: { family: "NanumSquareNeo" } },
+        },
+        y: { display: false }, // Y축 숨김
       },
     },
+    // 플러그인 직접 등록 (점 위에 숫자 표시)
+    plugins: [
+      {
+        id: "customDataLabels",
+        afterDatasetsDraw(chart, args, options) {
+          const { ctx } = chart;
+          chart.data.datasets.forEach((dataset, i) => {
+            const meta = chart.getDatasetMeta(i);
+            meta.data.forEach((element, index) => {
+              const data = dataset.data[index];
+
+              ctx.fillStyle = "#fff"; // 글씨 색상 (다크테마에 맞춰 흰색)
+              ctx.font = "bold 12px NanumSquareNeo";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "bottom";
+
+              // 점 위로 10px 띄워서 그리기
+              ctx.fillText(data + "°", element.x, element.y - 10);
+            });
+          });
+        },
+      },
+    ],
   });
 }
 
