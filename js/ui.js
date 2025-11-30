@@ -3,6 +3,67 @@ import { getIconPath, getTemp } from "./utils.js";
 
 let tempChart = null;
 
+function getDustStat(type, value) {
+  let status = "";
+  let cssClass = "";
+  let icon = "";
+
+  if (type === "PM10") {
+    if (value <= 20) {
+      status = "좋음";
+      cssClass = "dust-good";
+      icon = "🔵";
+    } else if (value <= 35) {
+      status = "보통";
+      cssClass = "dust-normal";
+      icon = "🟢";
+    } else if (value <= 50) {
+      status = "약간나쁨";
+      cssClass = "dust-not-good";
+      icon = "🟡";
+    } else if (value <= 70) {
+      status = "나쁨";
+      cssClass = "dust-bad";
+      icon = "🟠";
+    } else if (value <= 100) {
+      status = "매우 나쁨";
+      cssClass = "dust-very-bad";
+      icon = "🔴";
+    } else {
+      status = "위험";
+      cssClass = "dust-danger";
+      icon = "🟣";
+    } // 100 초과 시
+  } else if (type === "PM2.5") {
+    if (value <= 10) {
+      status = "좋음";
+      cssClass = "dust-good";
+      icon = "🔵";
+    } else if (value <= 17) {
+      status = "보통";
+      cssClass = "dust-normal";
+      icon = "🟢";
+    } else if (value <= 25) {
+      status = "약간나쁨";
+      cssClass = "dust-not-good";
+      icon = "🟡";
+    } else if (value <= 35) {
+      status = "나쁨";
+      cssClass = "dust-bad";
+      icon = "🟠";
+    } else if (value <= 50) {
+      status = "매우 나쁨";
+      cssClass = "dust-very-bad";
+      icon = "🔴";
+    } else {
+      status = "위험";
+      cssClass = "dust-danger";
+      icon = "🟣";
+    } // 100 초과 시
+  }
+  return { status, cssClass, icon };
+}
+
 // 현재 날씨 표시 함수
 export function displayWeather(data, forecastData, airData, isMetric) {
   const weatherResultDiv = document.querySelector("#weather-result");
@@ -12,17 +73,35 @@ export function displayWeather(data, forecastData, airData, isMetric) {
   const iconUrl = getIconPath(data.weather[0].icon);
   const tempValue = getTemp(data.main.temp, isMetric);
 
-  // 미세먼지 등급 계산 (1:좋음 ~ 5:매우나쁨)
-  const aqi = airData ? airData.list[0].main.aqi : 0;
-  const aqiText =
-    [
-      "정보없음",
-      "좋음 🔵",
-      "보통 🟢",
-      "나쁨 🟡",
-      "상당히 나쁨 🟠",
-      "매우 나쁨 🔴",
-    ][aqi] || "정보없음";
+  let pm10Html = "";
+  let pm25Html = "";
+
+  if (airData) {
+    const pm10Value = airData.list[0].components.pm10;
+    const pm25Value = airData.list[0].components.pm2_5;
+
+    // 등급 판별
+    const pm10Stat = getDustStat("PM10", pm10Value);
+    const pm25Stat = getDustStat("PM2.5", pm25Value);
+
+    // HTML 조립
+    pm10Html = `
+      <div class="dust-item ${pm10Stat.cssClass}">
+         <span>미세먼지:</span>
+         <span>${pm10Value}㎍/㎥</span>
+         <span>${pm10Stat.status} ${pm10Stat.icon}</span>
+      </div>
+    `;
+    pm25Html = `
+      <div class="dust-item ${pm25Stat.cssClass}">
+         <span>초미세먼지:</span>
+         <span>${pm25Value}㎍/㎥</span>
+         <span>${pm25Stat.status} ${pm25Stat.icon}</span>
+      </div>
+    `;
+  } else {
+    pm10Html = `<div>대기질 정보 없음</div>`;
+  }
 
   // 일출/일몰 계산
   const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString(
@@ -44,14 +123,20 @@ export function displayWeather(data, forecastData, airData, isMetric) {
               <div class="temp-box">
                 <h1 class="temp">${tempValue}${unitTemp}</h1>
                 <p class="desc">${data.weather[0].description}</p>
-                <p class="aqi-badge">미세먼지: ${aqiText}</p>
+                
+                <!-- ▼ 기존 aqi-badge 대신 새로운 dust-info-box 적용 -->
+                <div class="dust-info-box">
+                   ${pm10Html}
+                   ${pm25Html}
+                </div>
+
               </div>
             </div>
         </div>
 
+        <!-- ... 아래 weather-details 부분은 기존 코드 그대로 유지 ... -->
         <div class="weather-details">
             <div class="visual-grid">
-                
                 <div class="detail-card">
                    <span>💧 습도</span>
                    <div class="gauge-circle" style="--percent: ${
@@ -60,20 +145,12 @@ export function displayWeather(data, forecastData, airData, isMetric) {
                       <div class="inner">${data.main.humidity}%</div>
                    </div>
                 </div>
-
                 <div class="detail-card">
                    <span>☀️ 일출/일몰</span>
-                   <div class="sun-graphic">
-                      <div class="sun-arc">
-                        <div class="sun-icon">☀️</div>
-                      </div>
-                      <div class="sun-time">
-                        <span>${sunrise}</span>
-                        <span>${sunset}</span>
-                      </div>
+                   <div class="sun-time">
+                      <span>${sunrise}</span><span>${sunset}</span>
                    </div>
                 </div>
-
                 <div class="detail-card">
                    <span>🌧️ 강수량 / 💨 풍속</span>
                    <div class="text-data">
@@ -82,12 +159,11 @@ export function displayWeather(data, forecastData, airData, isMetric) {
                    </div>
                 </div>
             </div>
-
             <div class="chart-container">
                <canvas id="hourlyChart"></canvas>
             </div>
         </div>
-
+        
         <div class="expand-icon">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>

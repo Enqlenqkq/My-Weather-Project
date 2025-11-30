@@ -805,3 +805,41 @@ input {
     opacity: 1;
   }
 }
+
+.dust-good {
+  color: #1fa4ff;
+}
+.dust-normal {
+  color: #22bb22;
+}
+.dust-not-goot {
+  color: #ffdd3d;
+}
+.dust-bad {
+  color: #ff7f00;
+}
+.dust-very-bad {
+  color: #fe3636;
+}
+.dust-danger {
+  color: #ff73ff;
+}
+
+.dust-info-box {
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 8px 15px;
+  border-radius: 12px;
+  display: inline-flex;
+  flex-direction: column; /* 세로로 쌓기 */
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.dust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
