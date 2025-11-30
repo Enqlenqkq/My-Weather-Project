@@ -202,3 +202,33 @@ async function renderKoreaMap() {
   mapHtml += `</div>`;
   mapContainer.innerHTML = mapHtml;
 }
+
+// ==========================================
+// ★ 정보(About) 모달 구현
+// ==========================================
+const infoModal = document.querySelector("#infoModal");
+const closeInfoBtn = document.querySelector(".close-info");
+const infoMenuBtns = document.querySelectorAll("#infoMenuBtn, #desktopInfoBtn");
+
+// 1. 메뉴 버튼 클릭 시 열기
+infoMenuBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault(); // 링크 이동 방지
+    infoModal.classList.add("show");
+  });
+});
+
+// 2. 닫기 버튼 클릭 시 닫기
+closeInfoBtn.addEventListener("click", () => {
+  infoModal.classList.remove("show");
+});
+
+// 3. 모달 바깥 배경 클릭 시 닫기 (지도 모달 + 정보 모달 통합 처리)
+window.addEventListener("click", (e) => {
+  if (e.target === infoModal) {
+    infoModal.classList.remove("show");
+  }
+  if (e.target === mapModal) {
+    mapModal.classList.remove("show");
+  }
+});

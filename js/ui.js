@@ -113,6 +113,10 @@ export function displayWeather(data, forecastData, airData, isMetric) {
     minute: "2-digit",
   });
 
+  const popValue = forecastData
+    ? Math.round(forecastData.list[0].pop * 100)
+    : 0;
+
   // HTML 구조 (아코디언 + 디테일 섹션 강화)
   weatherResultDiv.innerHTML = `
     <div class="weather-card" id="weatherCard">
@@ -149,16 +153,12 @@ export function displayWeather(data, forecastData, airData, isMetric) {
 
                 <div class="detail-card">
                    <div class="detail-title">💨 풍속</div>
-                   <div class="detail-value">${
-                     data.wind.speed
-                   } ${unitSpeed}</div>
+                   <div class="detail-value">${data.wind.speed} ${unitSpeed}</div>
                 </div>
 
                 <div class="detail-card">
-                   <div class="detail-title">🌧️ 강수량</div>
-                   <div class="detail-value">${
-                     data.rain ? data.rain["1h"] || 0 : 0
-                   }mm</div>
+                   <div class="detail-title">☔ 강수 확률</div>
+                   <div class="detail-value">${popValue}%</div>
                 </div>
 
             </div>

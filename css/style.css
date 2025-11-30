@@ -63,6 +63,10 @@ body {
   height: 3rem;
 }
 
+.card-link {
+  text-decoration: none;
+}
+
 /* navbar 디자인 */
 .navbar {
   position: fixed;
@@ -672,6 +676,102 @@ input {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.modal-content.info-content {
+  max-width: 350px; /* 작고 귀여운 사이즈 */
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.close-info {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #aaa;
+}
+.close-info:hover {
+  color: #333;
+}
+
+.info-body {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-logo img {
+  margin-bottom: 10px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.info-body h3 {
+  margin: 0;
+  color: #2b7a78;
+  font-size: 1.5rem;
+}
+
+.version {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #eee;
+  margin: 10px 0;
+}
+
+.desc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.creator-info {
+  margin-top: 15px;
+  background: #f9f9f9;
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.creator-info p {
+  margin: 3px 0;
+}
+
+.links a {
+  display: inline-block;
+  margin-top: 8px;
+  color: #2b7a78;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.links a:hover {
+  text-decoration: underline;
+}
+
+.tech-stack {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tech-stack span {
+  background: #eef2f3;
+  color: #666;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -679,6 +779,12 @@ input {
   to {
     opacity: 1;
   }
+}
+
+footer {
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 ::-webkit-scrollbar {
