@@ -31,7 +31,11 @@
         <a href="https://my-weather-project-v.vercel.app/" class="card-link">
           <div class="title-logo">
             <img src="./images/logo_no_bg.png" alt="로고" />
-            <span>Weather<hr><strong>Impact</strong></span>
+            <span
+              >Weather
+              <hr />
+              <strong>Impact</strong></span
+            >
           </div>
         </a>
         <!--Navbar right-->
@@ -55,25 +59,25 @@
               </svg>
             </button>
             <a href="#" id="mapMenuBtn">날씨 지도</a>
-            <a href="#" id="infoMenuBtn">정보</a> </div>
+            <a href="#" id="infoMenuBtn">정보</a>
           </div>
+        </div>
+
+        <!--Unit Toggle Switch-->
+        <div class="toggle-wrapper">
+          <input type="checkbox" id="unitToggle" class="toggle-input" />
+          <label for="unitToggle" class="toggle-label">
+            <span class="toggle-ball"></span>
+            <span class="label-text c">°C</span>
+            <span class="label-text f">°F</span>
+          </label>
 
           <!--Desktop Menu-->
           <ul class="desktop-menu">
             <li><a href="#">홈</a></li>
             <li><a href="#" id="desktopMapBtn">날씨 지도</a></li>
-            <li><a href="#" id="desktopInfoBtn">정보</a></li> </ul>
+            <li><a href="#" id="desktopInfoBtn">정보</a></li>
           </ul>
-
-          <!--Unit Toggle Switch-->
-          <div class="toggle-wrapper">
-            <input type="checkbox" id="unitToggle" class="toggle-input" />
-            <label for="unitToggle" class="toggle-label">
-              <span class="toggle-ball"></span>
-              <span class="label-text c">°C</span>
-              <span class="label-text f">°F</span>
-            </label>
-          </div>
 
           <!--Hamburger Menu Button-->
           <button class="hamburger-btn" aria-label="메뉴 열기">
@@ -172,28 +176,33 @@
       <div class="modal-content info-content">
         <span class="close-info">&times;</span>
         <h2>앱 정보</h2>
-        
+
         <div class="info-body">
           <div class="app-logo">
-            <img src="./images/logo_no_bg.png" alt="로고" width="60">
+            <img src="./images/logo_no_bg.png" alt="로고" width="60" />
           </div>
           <h3>나만의 날씨 앱</h3>
           <p class="version">Version 1.0.0</p>
-          
+
           <div class="divider"></div>
-          
+
           <p class="desc">
-            이 앱은 OpenWeatherMap API를 활용하여<br>
+            이 앱은 OpenWeatherMap API를 활용하여<br />
             실시간 날씨와 예보를 제공합니다.
           </p>
-          
+
           <div class="creator-info">
             <p><strong>Developed by</strong></p>
-            <p>22017033 김태윤</p> <div class="links">
-              <a href="https://github.com/Enqlenqkq/My-Weather-Project" target="_blank">GitHub 방문하기</a>
+            <p>22017033 김태윤</p>
+            <div class="links">
+              <a
+                href="https://github.com/Enqlenqkq/My-Weather-Project"
+                target="_blank"
+                >GitHub 방문하기</a
+              >
             </div>
           </div>
-    
+
           <div class="tech-stack">
             <span>#HTML</span>
             <span>#CSS</span>
