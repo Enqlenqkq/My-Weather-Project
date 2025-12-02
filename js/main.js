@@ -177,6 +177,7 @@ const majorCities = [
 
 const mapModal = document.querySelector("#koreaMapModal");
 const mapContainer = document.querySelector("#korea-map-container");
+const closeMapBtn = document.querySelector(".close-map");
 
 // 지도 메뉴 클릭 시
 document.querySelectorAll("#mapMenuBtn, #desktopMapBtn").forEach((btn) => {
@@ -198,7 +199,9 @@ function closeMapModal() {
   if (lastFocusedElement) lastFocusedElement.focus();
 }
 
-closeMapBtn.addEventListener("click", closeMapModal);
+if (closeMapBtn) {
+  closeMapBtn.addEventListener("click", closeMapModal);
+}
 
 async function renderKoreaMap() {
   mapContainer.innerHTML = `<div class="loading">날씨 불러오는 중...</div>`;
@@ -252,21 +255,21 @@ infoMenuBtns.forEach((btn) => {
   });
 });
 
-// 2. 닫기 버튼 클릭 시 닫기
-closeInfoBtn.addEventListener("click", () => {
+function closeInfoModal() {
   infoModal.classList.remove("show");
-
-  // [접근성 추가] 초점 복귀
   if (lastFocusedElement) lastFocusedElement.focus();
-});
+}
 
+if (closeInfoBtn) {
+  closeInfoBtn.addEventListener("click", closeInfoModal);
+}
 // 3. 모달 바깥 배경 클릭 시 닫기 (지도 모달 + 정보 모달 통합 처리)
 window.addEventListener("click", (e) => {
   if (e.target === infoModal) {
-    infoModal.classList.remove("show");
+    closeInfoModal();
   }
   if (e.target === mapModal) {
-    mapModal.classList.remove("show");
+    closeMapModal();
   }
 });
 

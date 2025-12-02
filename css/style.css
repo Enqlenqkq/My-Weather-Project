@@ -901,6 +901,14 @@ footer {
     color: #ff7e67;
   }
 
+  .history-container {
+    margin-top: 0px;
+  }
+
+  .weather-card {
+    margin-top: 20px;
+  }
+
   /* 7. 예보 카드 가로 스크롤 (유지) */
   .forecast-container {
     display: flex;
