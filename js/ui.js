@@ -73,6 +73,9 @@ export function displayWeather(data, forecastData, airData, isMetric) {
   const iconUrl = getIconPath(data.weather[0].icon);
   const tempValue = getTemp(data.main.temp, isMetric);
 
+  // [접근성] 날씨 설명을 alt 텍스트로 사용
+  const weatherDesc = data.weather[0].description;
+
   let pm10Html = "";
   let pm25Html = "";
 
@@ -86,17 +89,17 @@ export function displayWeather(data, forecastData, airData, isMetric) {
 
     // HTML 조립
     pm10Html = `
-      <div class="dust-item ${pm10Stat.cssClass}">
+      <div class="dust-item ${pm10Stat.cssClass}" role="text">
          <span>미세먼지:</span>
          <span>${pm10Value}㎍/㎥</span>
-         <span>${pm10Stat.status} ${pm10Stat.icon}</span>
+         <span aria-label="${pm10Stat.status}">${pm10Stat.status} ${pm10Stat.icon}</span>
       </div>
     `;
     pm25Html = `
-      <div class="dust-item ${pm25Stat.cssClass}">
+      <div class="dust-item ${pm25Stat.cssClass}" role="text">
          <span>초미세먼지:</span>
          <span>${pm25Value}㎍/㎥</span>
-         <span>${pm25Stat.status} ${pm25Stat.icon}</span>
+         <span aria-label="${pm25Stat.status}">${pm25Stat.status} ${pm25Stat.icon}</span>
       </div>
     `;
   } else {
@@ -117,16 +120,20 @@ export function displayWeather(data, forecastData, airData, isMetric) {
     ? Math.round(forecastData.list[0].pop * 100)
     : 0;
 
-  // HTML 구조 (아코디언 + 디테일 섹션 강화)
+  // [접근성 추가]
+  // 1. tabindex="0": 키보드로 선택 가능하게 함
+  // 2. role="button": 스크린 리더에게 이것이 버튼임을 알림
+  // 3. aria-expanded="false": 현재 접혀있음을 알림
+  // 4. aria-label: 버튼의 기능 설명
   weatherResultDiv.innerHTML = `
-    <div class="weather-card" id="weatherCard">
+    <div class="weather-card" id="weatherCard" tabindex="0" role="button" aria-expanded="false" aria-label="${data.name} 현재 날씨, 클릭하여 상세 정보와 그래프 보기">
         <div class="weather-header">
             <h2 class="city-name">${data.name}</h2>
             <div class="main-info">
-              <img src="${iconUrl}" alt="날씨 아이콘" class="main-icon">
+              <img src="${iconUrl}" alt="${weatherDesc}" class="main-icon">
               <div class="temp-box">
-                <h1 class="temp">${tempValue}${unitTemp}</h1>
-                <p class="desc">${data.weather[0].description}</p>
+                <h1 class="temp" aria-label="현재 온도 ${tempValue}도">${tempValue}${unitTemp}</h1>
+                <p class="desc">${weatherDesc}</p>
                 
                 <div class="dust-info-box">
                    ${pm10Html}
@@ -136,7 +143,7 @@ export function displayWeather(data, forecastData, airData, isMetric) {
             </div>
         </div>
 
-        <div class="weather-details">
+        <div class="weather-details" aria-hidden="true">
             <div class="visual-grid">
                 
                 <div class="detail-card">
@@ -147,7 +154,8 @@ export function displayWeather(data, forecastData, airData, isMetric) {
                 <div class="detail-card">
                    <div class="detail-title">☀️ 일출 / 일몰</div>
                    <div class="detail-value" style="font-size: 1rem;">
-                      ${sunrise}<br>${sunset}
+                      <span aria-label="일출 ${sunrise}">${sunrise}</span><br>
+                      <span aria-label="일몰 ${sunset}">${sunset}</span>
                    </div>
                 </div>
 
@@ -164,25 +172,47 @@ export function displayWeather(data, forecastData, airData, isMetric) {
             </div>
 
             <div class="chart-container">
-               <canvas id="hourlyChart"></canvas>
+               <canvas id="hourlyChart" role="img" aria-label="향후 12시간 기온 변화 그래프"></canvas>
             </div>
         </div>
 
-        <div class="expand-icon">
+        <div class="expand-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
     </div>
   `;
 
-  // 아코디언 토글
+  // 아코디언 토글 로직
   const card = document.getElementById("weatherCard");
+  const details = document.querySelector(".weather-details");
+
+  // [접근성 추가] 토글 함수 분리 (클릭 & 키보드 공용)
+  function toggleCard() {
+    card.classList.toggle("expanded");
+    const isExpanded = card.classList.contains("expanded");
+
+    // 스크린 리더 상태 업데이트
+    card.setAttribute("aria-expanded", isExpanded);
+    details.setAttribute("aria-hidden", !isExpanded);
+
+    if (isExpanded) {
+      renderChart(forecastData, isMetric);
+    }
+  }
+
+  // 1. 마우스 클릭 이벤트
   card.addEventListener("click", (e) => {
-    // 캔버스 클릭 시 토글 방지 (그래프 터치 위해)
     if (e.target.tagName !== "CANVAS") {
-      card.classList.toggle("expanded");
-      if (card.classList.contains("expanded")) {
-        renderChart(forecastData, isMetric); // 열릴 때 차트 그리기
-      }
+      toggleCard();
+    }
+  });
+
+  // 2. [접근성 추가] 키보드 이벤트 (Enter, Space)
+  card.addEventListener("keydown", (e) => {
+    // 캔버스 등 내부 요소에서 이벤트 발생 시 무시할 필요가 있으면 조건 추가
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault(); // 스페이스바 스크롤 방지
+      toggleCard();
     }
   });
 }
@@ -190,6 +220,13 @@ export function displayWeather(data, forecastData, airData, isMetric) {
 // Chart.js 그래프 그리기 함수
 function renderChart(forecastData, isMetric) {
   const ctx = document.getElementById("hourlyChart").getContext("2d");
+
+  // [접근성 보완] 캔버스가 다시 그려질 때 속성 재확인
+  ctx.canvas.setAttribute("role", "img");
+  ctx.canvas.setAttribute(
+    "aria-label",
+    "향후 12시간 온도 변화를 나타내는 꺾은선 그래프"
+  );
 
   // 기존 차트 파괴 (중복 방지)
   if (tempChart) tempChart.destroy();
@@ -344,12 +381,14 @@ export function displayForecast(data, isMetric) {
     const dayName = date.toLocaleDateString("ko-KR", { weekday: "short" });
     const iconCode = item.weather[0].icon;
     const iconUrl = getIconPath(iconCode);
+    // [접근성] 날씨 설명 추가
+    const desc = item.weather[0].description;
 
     const cardHtml = `
       <div class="forecast-card">
         <div class="day">${dayName}</div>
-        <img src="${iconUrl}" alt="icon">
-        <div class="temp">${tempValue}${unitText}</div>
+        <img src="${iconUrl}" alt="${desc}">
+        <div class="temp" aria-label="${tempValue}도">${tempValue}${unitText}</div>
       </div>
     `;
     forecastContainer.insertAdjacentHTML("beforeend", cardHtml);
@@ -400,8 +439,9 @@ export function changeBackground(weatherMain, iconCode) {
 export function handleError(error) {
   console.error("에러 발생:", error);
   const weatherResultDiv = document.querySelector("#weather-result");
+  // [접근성 추가] role="alert": 에러 발생 시 스크린 리더가 즉시 읽어줌
   weatherResultDiv.innerHTML = `
-        <div class="weather-card" style="color: red;">
+        <div class="weather-card" style="color: red;" role="alert">
             <h3>오류 발생 ⚠️: ${error}</h3>
             <p>${error.message}</p>
         </div>
@@ -433,17 +473,18 @@ export function renderHistory() {
   const historyDiv = document.querySelector("#history-container");
   let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
 
-  historyDiv.innerHTML = ""; // 초기화
+  historyDiv.innerHTML = "";
 
   history.forEach((city) => {
     const btn = document.createElement("button");
     btn.textContent = city;
     btn.className = "history-btn";
+    // [접근성] 버튼에 검색 기능 설명 추가
+    btn.setAttribute("aria-label", `${city} 날씨 검색`);
 
     btn.addEventListener("click", () => {
       const searchBtn = document.querySelector("#searchBtn");
       const cityInput = document.querySelector("#cityInput");
-
       cityInput.value = city;
       searchBtn.click();
     });

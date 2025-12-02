@@ -64,7 +64,12 @@
 
           <!--Unit Toggle Switch-->
           <div class="toggle-wrapper">
-            <input type="checkbox" id="unitToggle" class="toggle-input" />
+            <input
+              type="checkbox"
+              id="unitToggle"
+              class="toggle-input"
+              aria-label="섭씨 화씨 단위 변환"
+            />
             <label for="unitToggle" class="toggle-label">
               <span class="toggle-ball"></span>
               <span class="label-text c">°C</span>
@@ -108,8 +113,14 @@
             type="text"
             id="cityInput"
             placeholder="도시 이름을 입력하세요. (예: Seoul, London)"
+            aria-label="도시 이름 검색"
           />
-          <button id="clearBtn" type="button" style="display: none">
+          <button
+            id="clearBtn"
+            type="button"
+            style="display: none"
+            aria-label="검색 창 지우기"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -126,7 +137,7 @@
             </svg>
           </button>
 
-          <button id="searchBtn">
+          <button id="searchBtn" aria-label="검색">
             <!-- 돋보기 아이콘 (SVG) -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +176,13 @@
     <!-- 대한민국 날씨 지도 모달-->
     <div id="koreaMapModal" class="modal">
       <div class="modal-content map-content">
-        <span class="close-map">&times;</span>
+        <span
+          class="close-map"
+          aria-label="지도 닫기"
+          role="button"
+          tabindex="0"
+          >&times;</span
+        >
         <h2>대한민국 날씨 지도</h2>
         <div id="korea-map-container"></div>
       </div>
@@ -174,14 +191,20 @@
     <!-- 정보 모달 -->
     <div id="infoModal" class="modal">
       <div class="modal-content info-content">
-        <span class="close-info">&times;</span>
+        <span
+          class="close-info"
+          aria-label="정보창 닫기"
+          role="button"
+          tabindex="0"
+          >&times;</span
+        >
         <h2>앱 정보</h2>
 
         <div class="info-body">
           <div class="app-logo">
             <img src="./images/logo_no_bg.png" alt="로고" width="60" />
           </div>
-          <h3>나만의 날씨 앱</h3>
+          <h3>Weather Impact</h3>
           <p class="version">Version 1.0.0</p>
 
           <div class="divider"></div>
@@ -198,6 +221,8 @@
               <a
                 href="https://github.com/Enqlenqkq/My-Weather-Project"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub 방문하기 (새 창에서 열림)"
                 >GitHub 방문하기</a
               >
             </div>
@@ -211,8 +236,7 @@
         </div>
       </div>
     </div>
-
     <script type="module" src="./js/main.js"></script>
+    <footer><p>© 2025 Taeyoon Kim. All Rights Reserved.</p></footer>
   </body>
-  <footer><p>© 2025 Taeyoon Kim. All Rights Reserved.</p></footer>
 </html>

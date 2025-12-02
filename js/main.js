@@ -22,6 +22,9 @@ let currentForecast = null;
 let currentAir = null;
 let isMetric = true;
 
+// [접근성 추가] 모달을 열기 전 초점이 있던 요소를 저장할 변수
+let lastFocusedElement = null;
+
 // 페이지 로드가 끝나면 실행
 window.addEventListener("load", () => {
   preloadImages();
@@ -121,11 +124,15 @@ const hamburgerBtn = document.querySelector(".hamburger-btn");
 // 햄버거 버튼 누르면 열기
 hamburgerBtn.addEventListener("click", () => {
   mobileMenu.classList.add("active"); // toggle 대신 add 사용 (확실하게 열기)
+  // [접근성 추가] 모바일 메뉴 열리면 닫기 버튼으로 초점 이동
+  setTimeout(() => closeMenuBtn.focus(), 100);
 });
 
 // X 버튼 누르면 닫기
 closeMenuBtn.addEventListener("click", () => {
   mobileMenu.classList.remove("active");
+  // [접근성 추가] 닫히면 햄버거 버튼으로 초점 복귀
+  hamburgerBtn.focus();
 });
 
 // 3. [추가] 메뉴 링크 누르면 자동으로 닫기 (UX 개선)
@@ -133,12 +140,24 @@ closeMenuBtn.addEventListener("click", () => {
 mobileMenu.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     mobileMenu.classList.remove("active");
+    hamburgerBtn.focus(); // [접근성 추가] 초점 복귀
   });
 });
 
-// 단위 토글 스위치
-document.querySelector("#unitToggle").addEventListener("change", () => {
-  isMetric = !document.querySelector("#unitToggle").checked;
+// 단위 토글 스위치 (키보드 접근성 - Enter/Space 지원)
+const unitToggleInput = document.querySelector("#unitToggle");
+const unitToggleLabel = document.querySelector(".toggle-label");
+
+// [접근성 추가] 라벨을 키보드로 눌렀을 때 체크박스 상태 변경
+unitToggleLabel.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    unitToggleInput.click();
+  }
+});
+
+unitToggleInput.addEventListener("change", () => {
+  isMetric = !unitToggleInput.checked;
   if (currentData)
     displayWeather(currentData, currentForecast, currentAir, isMetric);
   if (currentForecast) displayForecast(currentForecast, isMetric);
@@ -163,15 +182,23 @@ const mapContainer = document.querySelector("#korea-map-container");
 document.querySelectorAll("#mapMenuBtn, #desktopMapBtn").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
+
+    // [접근성 추가] 모달 열기 전, 현재 초점이 있는 요소 저장
+    lastFocusedElement = document.activeElement;
+
     mapModal.classList.add("show");
     renderKoreaMap();
   });
 });
 
-// 지도 닫기
-document
-  .querySelector(".close-map")
-  .addEventListener("click", () => mapModal.classList.remove("show"));
+// 지도 닫기 함수
+function closeMapModal() {
+  mapModal.classList.remove("show");
+  // [접근성 추가] 모달 닫으면 원래 버튼으로 초점 복귀
+  if (lastFocusedElement) lastFocusedElement.focus();
+}
+
+closeMapBtn.addEventListener("click", closeMapModal);
 
 async function renderKoreaMap() {
   mapContainer.innerHTML = `<div class="loading">날씨 불러오는 중...</div>`;
@@ -214,13 +241,23 @@ const infoMenuBtns = document.querySelectorAll("#infoMenuBtn, #desktopInfoBtn");
 infoMenuBtns.forEach((btn) => {
   btn.addEventListener("click", (e) => {
     e.preventDefault(); // 링크 이동 방지
+
+    // [접근성 추가] 초점 저장
+    lastFocusedElement = document.activeElement;
+
     infoModal.classList.add("show");
+
+    // [접근성 추가] 닫기 버튼으로 초점 이동
+    closeInfoBtn.focus();
   });
 });
 
 // 2. 닫기 버튼 클릭 시 닫기
 closeInfoBtn.addEventListener("click", () => {
   infoModal.classList.remove("show");
+
+  // [접근성 추가] 초점 복귀
+  if (lastFocusedElement) lastFocusedElement.focus();
 });
 
 // 3. 모달 바깥 배경 클릭 시 닫기 (지도 모달 + 정보 모달 통합 처리)
@@ -231,4 +268,23 @@ window.addEventListener("click", (e) => {
   if (e.target === mapModal) {
     mapModal.classList.remove("show");
   }
+});
+
+// 2. ESC 키 누르면 모달 닫기 (키보드 사용자 필수 UX)
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (infoModal.classList.contains("show")) closeInfoModal();
+    if (mapModal.classList.contains("show")) closeMapModal();
+  }
+});
+
+// 3. span 태그 버튼(닫기 버튼)에 엔터/스페이스 키 지원
+// (HTML에서 tabindex="0" role="button"을 줬지만, 클릭 이벤트는 자동 발생 안함)
+document.querySelectorAll(".close-map, .close-info").forEach((btn) => {
+  btn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      btn.click(); // 엔터/스페이스 누르면 클릭 이벤트 실행
+    }
+  });
 });
